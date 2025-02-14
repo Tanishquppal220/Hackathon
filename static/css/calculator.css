@@ -1,7 +1,9 @@
 .calculator-container {
     max-width: 1200px;
-    margin: 100px auto 1.5rem auto;
-    padding: 1.5rem;
+    margin: 150px auto 1.5rem auto;
+        /* Increased from 100px to 150px */
+        padding: 2rem;
+        /* Increased padding for better spacing */
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.2);
@@ -162,8 +164,9 @@ select:focus, input:focus {
 /* Responsive Design */
 @media (max-width: 768px) {
     .calculator-container {
-        margin: 80px 1rem 1rem 1rem;
-        padding: 1rem;
+        margin: 120px 1rem 1rem 1rem;
+            /* Increased from 80px to 120px for mobile */
+            padding: 1.5rem;
     }
 
     .status-options {
