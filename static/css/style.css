@@ -35,29 +35,57 @@ nav {
     background: var(--nav-blend);
     backdrop-filter: blur(8px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 1rem 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 2px 10px var(--shadow);
+    /* padding: 1rem 2rem; */
     position: fixed;
-    width: 100%;
+    width: 100vw;
     top: 0;
-    transition: transform 0.3s ease;
     z-index: 100;
+    box-shadow: 0 2px 10px var(--shadow);
+}
+
+.nav-grid {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.title {
+    color: var(--text-light);
+    font-size: 1.5rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+    padding-left: 2rem;
+    }
+    
+    .logo {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .logo img {
+        width: 140px;
+        height: 100px;
+        object-fit:fill;
+}
+
+.links {
+    display: flex;
+    justify-content: flex-end;
+    /* padding-right: 2rem; */
 }
 
 nav.hide {
     transform: translateY(-100%);
 }
 
-.logo {
-    color: var(--text-light);
-    font-size: 1.8rem;
-    font-weight: bold;
-    letter-spacing: 1px;
+.links {
+    display: flex;
+    align-items: center;
 }
-
 .links ul {
     display: flex;
     gap: 2.5rem;
@@ -83,7 +111,7 @@ nav.hide {
     transition: width 0.3s ease;
 }
 
-.links ul li a:hover::after {
+links ul li a:hover::after {
     width: 100%;
 }
 
@@ -196,6 +224,22 @@ nav.hide {
     .links ul {
         gap: 1.5rem;
     }
+.nav-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+}
+
+.title {
+    justify-self: center;
+    padding-left: 0;
+    text-align: center;
+}
+
+.links {
+    justify-self: center;
+    padding-right: 0;
+    justify-content: center;
+}
 }
 
 @media (max-width: 480px) {

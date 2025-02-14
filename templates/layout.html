@@ -8,13 +8,18 @@
 </head>
 <body>
     <nav>
-        <div class="logo">TaxGuru</div>
-        <div class="links">
-            <ul>
-                <li><a href="/">Dashboard</a></li>
-                <li><a href="/calc">Calculator</a></li>
-                <li><a href="/learn">Learn About Tax</a></li>
-            </ul>
+        <div class="nav-grid">
+            <div class="title">TaxGuru</div>
+            <div class="logo">
+                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="TaxGuru Logo">
+            </div>
+            <div class="links">
+                <ul>
+                    <li><a href="/">Dashboard</a></li>
+                    <li><a href="/calc">Calculator</a></li>
+                    <li><a href="/learn">Learn About Tax</a></li>
+                </ul>
+            </div>
         </div>
     </nav>
     {% block main %}
