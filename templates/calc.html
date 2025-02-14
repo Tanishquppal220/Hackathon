@@ -1,4 +1,275 @@
 {% extends 'layout.html' %}
+
+{% block title %}
+    Tax Calculator
+{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/calculator.css') }}">
+{% endblock %}
+
 {% block main %}
-    <h1>Hello World</h1>
+    <div class="calculator-container">
+        <!DOCTYPE html>
+        <html lang="en">
+
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Indian Tax Calculator</title>
+        </head>
+
+        <body>
+            <div class="container">
+                <div class="header">INDIAN TAX CALCULATOR</div>
+
+                <div class="salary-input-section">
+                    <label class="input-label">Annual Salary</label>
+                    <div class="slider-container">
+                        <input type="range" id="salarySlider" min="0" max="50000000" step="10000" value="1000000">
+                        <div class="slider-value" id="sliderValue">₹10.0L</div>
+                    </div>
+
+                    <div class="manual-salary-container">
+                        <label for="manualSalary" class="input-label">Or Enter Amount:</label>
+                        <input type="number" id="manualSalary" min="0" max="50000000" step="10000"
+                            placeholder="Enter annual salary">
+                    </div>
+                </div>
+
+                <div class="assessment-year-container">
+                    <label for="assessmentYear" class="input-label">Select Assessment Year:</label>
+                    <select id="assessmentYear">
+                        <option value="2020"> 2025-26</option>
+                        <option value="2020"> 2024-25</option>
+                        <option value="2023"> 2023-24</option>
+                        <option value="2022"> 2022-23</option>
+                        <option value="2021"> 2021-22</option>
+                        <option value="2020"> 2020-21</option>
+                        <option value="2019"> 2019-20</option>
+                        <option value="2018"> 2018-19</option>
+                        <!-- Add more options as needed -->
+                    </select>
+                </div>
+                <div class="select-container">
+                    <label class="input-label" for="taxpayerCategory">Select Tax Payer Category:</label>
+                    <select id="taxpayerCategory">
+                        <option value="">-- Select Category --</option>
+                        <option value="individual">Individual</option>
+                        <option value="huf">HUF</option>
+                        <option value="firm">AOPs/BOI</option>
+                        <option value="firm">Domestic Company</option>
+                        <option value="firm">Foreign Company</option>
+                        <option value="firm">Firms</option>
+                        <option value="firm">LLP</option>
+                        <option value="firm">Co-operative Society</option>
+                    </select>
+                </div>
+
+                <div class="age-category-container" id="ageCategoryContainer">
+                    <label class="input-label" for="ageCategory">Select Age Category:</label>
+                    <select id="ageCategory" onchange="calculateTax()">
+                        <option value="general">Below 60 years</option>
+                        <option value="senior">Senior Citizen (60-80 years)</option>
+                        <option value="super-senior">Super Senior Citizen (Above 80 years)</option>
+                    </select>
+                </div>
+
+                <div class="residential-status-container" id="residentialStatusContainer">
+                    <label class="input-label">Select Residential Status:</label>
+                    <div class="status-options">
+                        <div class="status-option" onclick="selectStatus('resident')" id="residentOption">Resident</div>
+                        <div class="status-option" onclick="selectStatus('nri')" id="nriOption">Non-Resident Indian</div>
+                        <div class="status-option" onclick="selectStatus('rnor')" id="rnorOption">Resident but Not Ordinarily
+                            Resident</div>
+                    </div>
+                </div>
+
+                <div class="result-box" id="taxAmountBox">Income Tax:  0</div>
+                <div class="details-box">
+                    <h3>Details</h3>
+                    <p>Annual Salary: <span id="salaryAmount">1000000</span></p>
+                    <p>Income Tax: <span id="taxAmount">-</span></p>
+                </div>
+                <button class="calculate-tax-btn" onclick="calculateTax()">Calculate Tax</button>
+                <div class="tax-laws">
+                    <h2>Indian Tax Laws</h2>
+                    <p>India's tax system is governed by the Income Tax Act of 1961. Key provisions include the classification
+                        of income into five heads: Salaries, Income from House Property, Profits and Gains of Business or
+                        Profession, Capital Gains, and Income from Other Sources. The Act mandates that individuals earning
+                        above a certain threshold must file income tax returns annually. Deductions under Section 80C, such as
+                        investments in PPF, NSC, and life insurance premiums, can reduce taxable income. Additionally, the Goods
+                        and Services Tax (GST) implemented in 2017, replaced multiple indirect taxes with a unified tax
+                        structure, simplifying compliance for businesses. Understanding these laws is crucial for effective tax
+                        planning and compliance.</p>
+                </div>
+            </div>
+
+            <script>
+                let currentSalary = 1000000;
+                let selectedStatus = 'resident';
+
+                function formatAmount(amount) {
+                    if (amount >= 10000000) {
+                        return '₹' + (amount / 10000000).toFixed(2) + ' Cr';
+                    } else if (amount >= 100000) {
+                        return '₹' + (amount / 100000).toFixed(1) + ' L';
+                    }
+                    return '₹' + amount.toLocaleString('en-IN');
+                }
+
+                function updateDisplay(value) {
+                    currentSalary = Number(value);
+                    document.getElementById('sliderValue').textContent = formatAmount(currentSalary);
+                    document.getElementById('salaryAmount').textContent = formatAmount(currentSalary);
+                    document.getElementById('manualSalary').value = currentSalary;
+                    document.getElementById('salarySlider').value = currentSalary;
+                }
+
+                function handleTaxpayerChange() {
+                    const taxpayerCategory = document.getElementById('taxpayerCategory').value;
+                    const ageCategoryContainer = document.getElementById('ageCategoryContainer');
+                    const residentialStatusContainer = document.getElementById('residentialStatusContainer');
+
+                    if (taxpayerCategory === 'individual') {
+                        ageCategoryContainer.classList.add('visible');
+                        residentialStatusContainer.classList.add('visible');
+                    } else {
+                        ageCategoryContainer.classList.remove('visible');
+                        residentialStatusContainer.classList.remove('visible');
+                    }
+
+                    calculateTax();
+                }
+
+                function selectStatus(status) {
+                    selectedStatus = status;
+                    document.querySelectorAll('.status-option').forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    document.getElementById($,{ status },Option).classList.add('selected');
+                    calculateTax();
+                }
+
+                function calculateTax() {
+                    let tax = 0;
+                    let salary = currentSalary;
+                    const taxpayerCategory = document.getElementById('taxpayerCategory').value;
+                    const ageCategory = document.getElementById('ageCategory').value;
+
+                    if (taxpayerCategory === 'individual') {
+                        // Apply residential status modifications
+                        let basicExemption = 250000;
+                        let surchargeRate = 0.1; // 10% default
+
+                        switch (selectedStatus) {
+                            case 'resident':
+                                // Standard tax calculation
+                                break;
+                            case 'nri':
+                                basicExemption = 250000;
+                                surchargeRate = 0.15; // Higher surcharge for NRIs
+                                break;
+                            case 'rnor':
+                                basicExemption = 250000;
+                                surchargeRate = 0.12; // Medium surcharge for RNOR
+                                break;
+                        }
+
+                        // Existing age-based calculations with modified exemption
+                        switch (ageCategory) {
+                            case 'general':
+                                // Existing tax calculation for below 60
+                                if (salary <= 300000) {
+                                    tax = 0;
+                                } else if (salary <= 600000) {
+                                    tax = (salary - 300000) * 0.05;
+                                } else if (salary <= 900000) {
+                                    tax = 15000 + (salary - 600000) * 0.10;
+                                } else if (salary <= 1200000) {
+                                    tax = 45000 + (salary - 900000) * 0.15;
+                                } else if (salary <= 1500000) {
+                                    tax = 90000 + (salary - 1200000) * 0.20;
+                                } else {
+                                    tax = 150000 + (salary - 1500000) * 0.30;
+                                }
+                                break;
+
+                            case 'senior':
+                                // Tax calculation for senior citizens (60-80 years)
+                                if (salary <= 300000) {
+                                    tax = 0;
+                                } else if (salary <= 500000) {
+                                    tax = (salary - 300000) * 0.05;
+                                } else if (salary <= 1000000) {
+                                    tax = 10000 + (salary - 500000) * 0.20;
+                                } else {
+                                    tax = 110000 + (salary - 1000000) * 0.30;
+                                }
+                                break;
+
+                            case 'super-senior':
+                                // Tax calculation for super senior citizens (above 80 years)
+                                if (salary <= 500000) {
+                                    tax = 0;
+                                } else if (salary <= 1000000) {
+                                    tax = (salary - 500000) * 0.20;
+                                } else {
+                                    tax = 100000 + (salary - 1000000) * 0.30;
+                                }
+                                break;
+                        }
+
+                        // Apply surcharge if applicable (for income > 50L)
+                        if (salary > 5000000) {
+                            const baseTax = tax;
+                            tax += baseTax * surchargeRate;
+                        }
+                    } else {
+                        // Existing non-individual tax calculation
+                        if (salary <= 300000) {
+                            tax = 0;
+                        } else if (salary <= 600000) {
+                            tax = (salary - 300000) * 0.05;
+                        } else if (salary <= 900000) {
+                            tax = 15000 + (salary - 600000) * 0.10;
+                        } else if (salary <= 1200000) {
+                            tax = 45000 + (salary - 900000) * 0.15;
+                        } else if (salary <= 1500000) {
+                            tax = 90000 + (salary - 1200000) * 0.20;
+                        } else {
+                            tax = 150000 + (salary - 1500000) * 0.30;
+                        }
+                    }
+
+                    // Add 4% cess
+                    tax = tax + (tax * 0.04);
+
+                    document.getElementById("taxAmount").innerText = formatAmount(tax);
+                    document.getElementById("taxAmountBox").innerText = "Income Tax: " + formatAmount(tax);
+                }
+
+                // Initialize
+                window.onload = function () {
+                    const slider = document.getElementById('salarySlider');
+                    const manualInput = document.getElementById('manualSalary');
+
+                    slider.addEventListener('input', (e) => updateDisplay(e.target.value));
+                    manualInput.addEventListener('input', (e) => {
+                        let value = Number(e.target.value);
+                        value = Math.min(Math.max(value, 0), 50000000);
+                        updateDisplay(value);
+                    });
+
+                    document.getElementById('taxpayerCategory').addEventListener('change', handleTaxpayerChange);
+                    handleTaxpayerChange(); // Initial check
+
+                    updateDisplay(currentSalary);
+                    selectStatus('resident'); // Set default status
+                }
+            </script>
+        </body>
+
+        </html>
+    </div>
 {% endblock %}

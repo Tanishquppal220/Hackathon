@@ -1,0 +1,176 @@
+.calculator-container {
+    max-width: 1200px;
+    margin: 100px auto 1.5rem auto;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    box-shadow: 0 4px 20px var(--shadow);
+    color: var(--primary);
+}
+
+.header {
+    background: var(--primary);
+    color: var(--text-light);
+    padding: 1.2rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+    border-radius: 15px;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    box-shadow: 0 4px 6px var(--shadow);
+}
+
+.salary-input-section {
+    background: linear-gradient(145deg, #ffffff, #f8f3ff);
+    padding: 1.5rem;
+    border-radius: 15px;
+    border: 1px solid rgba(74, 20, 140, 0.1);
+    margin-bottom: 1.5rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.slider-container {
+    padding: 1rem 0;
+}
+
+input[type="range"] {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 8px;
+    border-radius: 5px;
+    background: linear-gradient(90deg, var(--accent), var(--primary-light));
+    outline: none;
+    margin: 1rem 0;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 24px;
+    height: 24px;
+    background: white;
+    border: 3px solid var(--primary);
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.slider-value {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--primary);
+    margin: 0.5rem 0;
+}
+
+.input-label {
+    color: var(--primary);
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+select, input[type="number"] {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid rgba(74, 20, 140, 0.1);
+    border-radius: 10px;
+    background: white;
+    color: var(--primary);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+select:focus, input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(74, 20, 140, 0.1);
+}
+
+.result-box {
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    color: var(--text-light);
+    padding: 1.5rem;
+    border-radius: 15px;
+    margin: 1.5rem 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-align: center;
+    box-shadow: 0 4px 15px var(--shadow);
+}
+
+.calculate-tax-btn {
+    background: var(--primary);
+    color: var(--text-light);
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 25px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: block;
+    margin: 1.5rem auto;
+    width: fit-content;
+}
+
+.calculate-tax-btn:hover {
+    background: var(--primary-light);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px var(--shadow);
+}
+
+/* Container Styles */
+.assessment-year-container,
+.select-container,
+.age-category-container,
+.residential-status-container {
+    background: linear-gradient(145deg, #ffffff, #f8f3ff);
+    padding: 1.2rem;
+    border-radius: 15px;
+    margin: 1rem 0;
+    border: 1px solid rgba(74, 20, 140, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.status-options {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.8rem;
+}
+
+.status-option {
+    flex: 1;
+    padding: 0.8rem;
+    text-align: center;
+    border: 2px solid var(--primary);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.status-option:hover,
+.status-option.selected {
+    background: var(--primary);
+    color: var(--text-light);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .calculator-container {
+        margin: 80px 1rem 1rem 1rem;
+        padding: 1rem;
+    }
+
+    .status-options {
+        flex-direction: column;
+    }
+
+    .status-option {
+        width: 100%;
+    }
+}

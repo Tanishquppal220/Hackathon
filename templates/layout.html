@@ -3,15 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TaxGuru: {% block title %}   {% endblock %} </title>
+    <title>TaxGuru: {% block title %}Home{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block head %}{% endblock %}
 </head>
 <body>
     <nav>
         <div class="nav-grid">
-            <div class="title">TaxGuru</div>
+            <div class="title"></div>
             <div class="logo">
-                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="TaxGuru Logo">
+                <a href="/dashboard">
+                    <img src="{{ url_for('static', filename='img/logo.png') }}" alt="TaxGuru Logo">
+                </a>
             </div>
             <div class="links">
                 <ul>

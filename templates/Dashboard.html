@@ -18,57 +18,15 @@
 
         <section class="fy-timeline">
             <div class="timeline-header">
-                <h2>Financial Year 2023-24</h2>
+                <h2>Financial Year 2024-25</h2>
                 <div class="timeline-controls">
-                    <button class="quarter-nav" data-quarter="prev">←</button>
-                    <span class="current-quarter">Q3 (Oct-Dec)</span>
-                    <button class="quarter-nav" data-quarter="next">→</button>
+                    <button class="month-nav" data-nav="prev">←</button>
+                    <span class="current-period">April - June</span>
+                    <button class="month-nav" data-nav="next">→</button>
                 </div>
             </div>
             <div class="timeline-grid">
-                <!-- October -->
-                <div class="month-card current">
-                    <div class="month-header">
-                        <h3>October</h3>
-                        <span class="tax-due">₹12,500</span>
-                    </div>
-                    <div class="month-events">
-                        <div class="event due">
-                            <span class="event-date">15 Oct</span>
-                            <span class="event-label">Advance Tax Due</span>
-                        </div>
-                        <div class="event completed">
-                            <span class="event-date">05 Oct</span>
-                            <span class="event-label">Form 16 Updated</span>
-                        </div>
-                    </div>
-                </div>
-                <!-- November -->
-                <div class="month-card upcoming">
-                    <div class="month-header">
-                        <h3>November</h3>
-                        <span class="tax-due">₹15,000</span>
-                    </div>
-                    <div class="month-events">
-                        <div class="event pending">
-                            <span class="event-date">30 Nov</span>
-                            <span class="event-label">80C Investment Due</span>
-                        </div>
-                    </div>
-                </div>
-                <!-- December -->
-                <div class="month-card upcoming">
-                    <div class="month-header">
-                        <h3>December</h3>
-                        <span class="tax-due">₹15,000</span>
-                    </div>
-                    <div class="month-events">
-                        <div class="event upcoming">
-                            <span class="event-date">31 Dec</span>
-                            <span class="event-label">HRA Proof Submission</span>
-                        </div>
-                    </div>
-                </div>
+                <!-- Will be populated by JavaScript -->
             </div>
         </section>
         
@@ -137,7 +95,26 @@
                             <a href="/calc" class="suggestion-link">Calculate Savings →</a>
                         </div>
                     </div>
+                    <div class="ai-chat">
+                        <div class="chat-header">
+                            <span class="ai-icon">🤖</span>
+                            <h3>Ask TaxGuru AI</h3>
+                        </div>
+                        <div class="chat-body">
+                            <div class="chat-message ai">
+                                <div class="message-bubble">
+                                    Hello! I'm your TaxGuru AI assistant. How can I help you with your tax-related questions?
+                                </div>
+                            </div>
+                            <!-- Chat messages will be dynamically added here -->
+                        </div>
+                        <div class="chat-input">
+                            <input type="text" placeholder="Type your tax-related question..." id="chat-input">
+                            <button onclick="sendMessage()">Send</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
+        <script src="{{ url_for('static', filename='js/quarters.js') }}"></script>
     {% endblock %}
