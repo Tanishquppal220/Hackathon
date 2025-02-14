@@ -1,0 +1,1 @@
+This directory will contain static files for the web application.

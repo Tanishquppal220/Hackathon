@@ -1,0 +1,1 @@
+This directory will contain AI-related Python files for chatbot and document parsing.
