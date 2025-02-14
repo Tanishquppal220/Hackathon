@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tax Calculator</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            padding: 20px;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #e9ecef;
+            border-radius: 8px;
+        }
+        .result h4 {
+            margin-bottom: 15px;
+        }
+        .result-table {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .result-table div {
+            padding: 10px;
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+        }
+        .result-table div:nth-child(odd) {
+            background-color: #f8f9fa;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+        .header {
+            background-color: #ffcc00;
+            color: white;
+            padding: 10px;
+            border-radius: 8px 8px 0 0;
+            text-align: center;
+        }
+        .footer {
+            background-color: #73ff00;
+            color: white;
+            padding: 10px;
+            border-radius: 0 0 8px 8px;
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h2>Tax Calculator</h2>
+    </div>
+    <form id="taxForm">
+        <div class="form-group">
+            <label for="income">Annual Income (₹):</label>
+            <input type="number" class="form-control" id="income" required>
+        </div>
+        <div class="form-group">
+            <label for="age">Age:</label>
+            <select class="form-control" id="age" required>
+                <option value="below60">Below 60</option>
+                <option value="60to80">60 to 80</option>
+                <option value="above80">Above 80</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="residency">Residency Status:</label>
+            <select class="form-control" id="residency" required>
+                <option value="resident">Resident</option>
+                <option value="nonResident">Non-Resident</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="investments">Investments under Section 80C (₹):</label>
+            <input type="number" class="form-control" id="investments" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Calculate Tax</button>
+    </form>
+
+    <div class="result" id="result" style="display: none;">
+        <h4>Tax Calculation Result</h4>
+        <div class="result-table">
+            <div>Annual Income:</div>
+            <div>₹<span id="resultIncome"></span></div>
+            <div>Taxable Income:</div>
+            <div>₹<span id="resultTaxableIncome"></span></div>
+            <div>Income Tax:</div>
+            <div>₹<span id="resultTax"></span></div>
+            <div>Net Income:</div>
+            <div>₹<span id="resultNetIncome"></span></div>
+        </div>
+    </div>
+    <div class="footer">
+        <p>&copy; 2023 Tax Calculator. All rights reserved.</p>
+    </div>
+</div>
+
+<script>
+    document.getElementById('taxForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const income = parseFloat(document.getElementById('income').value);
+        const age = document.getElementById('age').value;
+        const residency = document.getElementById('residency').value;
+        const investments = parseFloat(document.getElementById('investments').value);
+
+        let taxableIncome = income - investments;
+        let tax = 0;
+
+        if (residency === 'resident') {
+            if (age === 'below60') {
+                if (taxableIncome > 1500000) {
+                    tax = (taxableIncome - 1500000) * 0.30 + 187500;
+                } else if (taxableIncome > 1250000) {
+                    tax = (taxableIncome - 1250000) * 0.25 + 125000;
+                } else if (taxableIncome > 1000000) {
+                    tax = (taxableIncome - 1000000) * 0.20 + 75000;
+                } else if (taxableIncome > 500000) {
+                    tax = (taxableIncome - 500000) * 0.10 + 12500;
+                } else if (taxableIncome > 250000) {
+                    tax = (taxableIncome - 250000) * 0.05;
+                }
+            } else if (age === '60to80') {
+                if (taxableIncome > 1500000) {
+                    tax = (taxableIncome - 1500000) * 0.30 + 187500;
+                } else if (taxableIncome > 1250000) {
+                    tax = (taxableIncome - 1250000) * 0.25 + 125000;
+                } else if (taxableIncome > 1000000) {
+                    tax = (taxableIncome - 1000000) * 0.20 + 75000;
+                } else if (taxableIncome > 500000) {
+                    tax = (taxableIncome - 500000) * 0.10 + 10000;
+                } else if (taxableIncome > 300000) {
+                    tax = (taxableIncome - 300000) * 0.05;
+                }
+            } else if (age === 'above80') {
+                if (taxableIncome > 1500000) {
+                    tax = (taxableIncome - 1500000) * 0.30 + 187500;
+                } else if (taxableIncome > 1250000) {
+                    tax = (taxableIncome - 1250000) * 0.25 + 125000;
+                } else if (taxableIncome > 1000000) {
+                    tax = (taxableIncome - 1000000) * 0.20 + 75000;
+                } else if (taxableIncome > 500000) {
+                    tax = (taxableIncome - 500000) * 0.10 + 10000;
+                } else if (taxableIncome > 500000) {
+                    tax = (taxableIncome - 500000) * 0.05;
+                }
+            }
+        } else if (residency === 'nonResident') {
+            tax = taxableIncome * 0.30;
+        }
+
+        const netIncome = income - tax;
+
+        document.getElementById('resultIncome').textContent = income.toFixed(2);
+        document.getElementById('resultTaxableIncome').textContent = taxableIncome.toFixed(2);
+        document.getElementById('resultTax').textContent = tax.toFixed(2);
+        document.getElementById('resultNetIncome').textContent = netIncome.toFixed(2);
+
+        document.getElementById('result').style.display = 'block';
+    });
+</script>
+
+</body>
+</html>

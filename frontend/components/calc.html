@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+
+<head>
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+	<meta name="author" content="Hans Liu">
+	<meta name="keywords"
+		content="india, non resident, income, tax, calculation, calculator, India, 所得稅, 稅率, 計算">
+	<meta name="description"
+		content="Using the India Tax Calculator, you can get an idea of the amount of taxes you might have to pay.">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!-- icon -->
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+
+	<!-- parser -->
+	<meta name="robots" content="index, follow">
+	<meta name="googlebot" content="index, follow">
+	<meta name="baiduspider" content="index, nofollow">
+
+	<!-- Stylesheets
+		============================================= -->
+	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+		rel="stylesheet">
+	<!-- CSS only -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+		integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N"
+		crossorigin="anonymous">
+	<!-- JS, Popper.js, and jQuery -->
+	<script src="https://code.jquery.com/jquery-3.7.1.slim.min.js"
+		integrity="sha384-5AkRS45j4ukf+JbWAfHL8P4onPA9p0KwwP7pUdjSQA3ss9edbJUJc/XcYAiheSSz"
+		crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+		integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+		crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"
+		integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+"
+		crossorigin="anonymous"></script>
+
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-EGMBF6Q9ZX"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+
+		gtag('config', 'G-EGMBF6Q9ZX');
+	</script>
+
+	<!-- Document Title
+		============================================= -->
+	<title>India Tax Calculator</title>
+
+	<style>
+		[v-cloak] {
+			display: none;
+		}
+
+		body {
+			font-family: 'Roboto';
+		}
+
+		h1 {
+			padding: 30px 0px 30px 0px;
+			font-size: 28px;
+			font-weight: 700;
+			text-transform: uppercase;
+			letter-spacing: 1px;
+			text-align: center;
+			box-shadow: 0px 2px 16px #e8e8e8;
+		}
+
+		h1 span {
+			color: #1abc9c;
+		}
+
+		h2 {
+			font-family: sans-serif;
+			font-weight: 600;
+			font-size: 24px;
+		}
+
+		h2 span {
+			color: #1abc9c;
+		}
+
+		h3 {
+			font-family: sans-serif;
+			font-weight: 600;
+			font-size: 20px;
+		}
+
+		h3 span {
+			color: #1abc9c;
+		}
+
+		.intro {
+			font-family: sans-serif;
+			font-size: 15px;
+			margin: 40px;
+			color: #5a5a5a;
+		}
+
+		p {
+			font-family: sans-serif;
+			font-size: 15px;
+			color: #5a5a5a;
+		}
+
+		.section {
+			padding: 20px;
+			color: white;
+			text-align: center;
+		}
+
+		#section-salary {
+			background-color: #2581d0;
+		}
+
+		#section-net-income {
+			background: #1abc9c;
+		}
+
+		#section-details {
+			padding: 20px;
+		}
+
+		.irs {
+			margin-bottom: 25px;
+		}
+
+		.irs-min,
+		.irs-max,
+		.irs-single {
+			font-size: 14px !important;
+			font-family: 'Roboto' !important;
+		}
+
+		.irs-min,
+		.irs-max {
+			background: #52a9f7 !important;
+			color: white !important;
+		}
+
+		.irs--flat .irs-bar,
+		.irs--round .irs-bar {
+			background: #1abc9c !important;
+		}
+
+		.irs-single {
+			background-color: #1abc9c !important;
+		}
+
+		.irs-handle {
+			border-color: #1abc9c !important;
+			cursor: pointer !important;
+		}
+
+		.irs-grid-text {
+			color: #66a9e4 !important;
+		}
+
+		label {
+			font-size: 13px;
+			font-weight: 700;
+			text-transform: uppercase;
+			letter-spacing: 1px;
+		}
+
+		.progress {
+			margin-bottom: 5px;
+			height: 30px;
+			background-color: rgba(0, 0, 0, 0.15);
+			box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.12);
+			border-radius: 0;
+		}
+
+		.progress span {
+			font-weight: 400;
+			position: absolute;
+			left: 50%;
+			transform: translateX(-50%);
+			text-transform: uppercase;
+			font-size: 13px;
+			line-height: 30px;
+		}
+
+		input[type="checkbox"],
+		input[type="radio"] {
+			position: absolute;
+			opacity: 0;
+			z-index: -1;
+		}
+
+		input[type="checkbox"]+label::after {
+			content: "\2714";
+			color: #2c3e50;
+		}
+
+		input[type="checkbox"]:checked+label::before,
+		input[type="radio"]:checked+label::before {
+			content: " ";
+			background: #1abc9c;
+		}
+
+		input[type="checkbox"]+label::after,
+		input[type="radio"]+label::after {
+			-webkit-transform: scale(0);
+			-ms-transform: scale(0);
+			-o-transform: scale(0);
+			transform: scale(0);
+		}
+
+		/* Number */
+		input[type="number"] {
+			background-color: transparent;
+			color: white;
+			border: 2px solid #ffffff;
+			border-radius: 0px;
+			width: 100px;
+		}
+
+		.number-label {
+			position: relative;
+			display: inline-block;
+			color: white;
+		}
+
+		.number-label::before {
+			position: absolute;
+			top: -.5em;
+			left: 0;
+			content: "₹";
+		}
+
+		/* Checkbox */
+		input[type="checkbox"]+label::after {
+			content: " ";
+			color: #2c3e50;
+		}
+
+		/* Radio */
+		input[type="radio"]+label::before {
+			border-radius: 50%;
+		}
+
+		input[type=radio]+label::after {
+			content: " ";
+			top: .25em;
+			left: .25em;
+			width: 1em;
+			height: 1em;
+			background: #fff;
+			border: .2em solid #2c3e50;
+			border-radius: 50%;
+		}
+
+		input[type="checkbox"]:checked+label::after,
+		input[type=radio]:checked+label::after {
+			-webkit-transform: scale(1);
+			-ms-transform: scale(1);
+			-o-transform: scale(1);
+			transform: scale(1);
+		}
+
+		.checkbox-label {
+			position: relative;
+			display: inline-block;
+			padding: 0 0 0 2em;
+			cursor: pointer;
+			color: white;
+		}
+
+		.checkbox-label::before,
+		.checkbox-label::after {
+			position: absolute;
+			top: 0;
+			left: 0;
+			display: block;
+			width: 1.5em;
+			height: 1.5em;
+		}
+
+		.checkbox-label::before {
+			content: " ";
+			border: 2px solid #ffffff;
+			border-radius: 0px;
+		}
+
+		#calculation-details-tabs {
+			margin-top: 20px;
+			background: #dbecff;
+			margin: 20px 0px 0px 0px;
+			padding: 10px;
+			border-radius: 0px;
+		}
+
+		#calculation-details-tabs .col-2 {
+			padding: 0px 10px 0px 0px;
+		}
+
+		#calculation-details-tabs .col-10 {
+			background: white;
+			border-radius: 0px;
+			padding: 10px 15px;
+		}
+
+		#detail-tabs-results {
+			width: 100%;
+		}
+
+		#detail-tabs-results td:nth-child(2) {
+			text-align: right;
+		}
+
+		#detail-tabs-results tr {
+			border-bottom: 1px solid #e8e8e8;
+		}
+
+		#comments {
+			margin-top: 30px;
+			background: #e8e8e8;
+			border-top: 5px #1abc9c solid;
+			padding: 20px;
+			margin-left: -20px;
+			margin-right: -20px;
+		}
+
+		@media only screen and (max-width: 600px) {
+			.nav-pills .nav-link {
+				padding: 2px;
+				font-size: 12px;
+				text-transform: uppercase;
+				margin-bottom: 10px;
+			}
+
+			#calculation-details-tabs {
+				margin: 20px -20px 0px -20px;
+				padding: 5px;
+			}
+		}
+	</style>
+
+</head>
+
+<body>
+
+	<!-- Document Wrapper
+		============================================= -->
+	<div id="wrapper">
+
+		<h1>India <span>Tax</span> Calculator</h1>
+
+		<!-- Content
+			============================================= -->
+		<section id="content">
+
+		<i18n path="intro.content" tag="p" class="intro">
+			<template #average_year>
+				<span>{{ $t('intro.average_year') }}</span>
+			</template>
+			<template #average_salary>
+				<b>{{ $t('intro.average_salary') }}</b>
+			</template>
+		</i18n>
+
+			<div id="section-salary" class="section">
+
+				<i18n path="salary.title" tag="h2">
+					<template #ayear>
+						<b>{{ $t('salary.ayear') }}</b>
+					</template>
+					<template #expenses>
+						<span style="font-size: 14px; font-style: italic; color: white; font-weight: normal;">
+							{{ $t('salary.expenses') }}
+						</span>
+					</template>
+				</i18n>
+
+				<div class="container clearfix divcenter center"></div>
+					<!-- <h3 class="divcenter font-body nobottommargin"></h3> -->
+
+					<p style="margin-top: 0px; margin-bottom: 10px;"></p>
+						<label for="uiSalary" class="number-label" style="margin-right: 20px;"></label>
+						<input id="uiSalary" class="number-style" v-model="uiSalary" type="number" inputmode="numeric" onchange="rangeSalaryUpdate()" required>
+					</p>
+
+					<div class="white-section">
+						<input class="salary-range" type="range"></input>
+					</div>
+
+					<p style="margin-top: 20px; margin-bottom: 0px;">
+						<input v-if="!isNonResident" id="permanentResident" class="checkbox-style" v-model="isPermanentResident" type="checkbox">
+						<label v-if="!isNonResident" for="permanentResident" class="checkbox-label" style="margin-right: 20px;">Indian Citizen / Permanent Resident</label>
+						<input v-if="!isPermanentResident" id="nonResident" class="checkbox-style" v-model="isNonResident" type="checkbox">
+						<label v-if="!isPermanentResident" for="nonResident" class="checkbox-label" style="margin-right: 20px;">Non-Resident (Stay Less than 183 Days)</label>
+					</p>
+
+				</div>
+			</div>
+
+			<div id="section-net-income" class="section"></div>
+				<div class="container clearfix divcenter center">
+
+					<h2 style="margin-bottom: 20px;">{{ $t('salary.net_income') }}<br />{{incomeNet | toINR}}</h2>
+
+					<div class="progress">
+						<div class="progress-bar progress-bar-animated" role="progressbar"
+							v-bind:style="{ width: pfWithholdPercent  * 2 + '%', 'background-color': '#0042bb;' }">
+							<span>
+								PF Withhold: {{pfWithholdAmount | toINR}} ({{pfWithholdPercent}}%)
+							</span>
+						</div>
+					</div>
+
+					<div class="progress"></div>
+						<div class="progress-bar progress-bar-animated" role="progressbar"
+							v-bind:style="{ width: incomeTaxPercent  * 2 + '%', 'background-color': '#7752e8' }">
+							<span>
+								Income Tax: {{incomeTaxAmount | toINR}} ({{incomeTaxPercent}}%)
+							</span>
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+			<div id="section-details">
+
+				<h2>Calculation <span>details</span></h2>
+
+				<div class="row" id="calculation-details-tabs">
+
+					<div class="col-3 col-md-2"></div>
+
+						<ul class="nav flex-column nav-pills" id="pills-tab" role="tablist"></ul>
+							<li class="nav-item" role="tab" aria-controls="tab-pf-withhold" aria-selected="false">
+								<a href="#tab-pf-withhold" class="nav-link" data-toggle="tab">PF Withhold</a></li>
+							<li class="nav-item" role="tab" aria-controls="tab-income-tax" aria-selected="false">
+								<a href="#tab-income-tax" class="nav-link" data-toggle="tab">Income Tax</a></li>
+							<li class="nav-item" role="tab" tabindex="0" aria-controls="tab-intro" aria-selected="true">
+								<a href="#tab-intro" class="nav-link active" data-toggle="tab">Net Income</a></li>
+						</ul>
+
+					</div>
+
+					<div class="col-9 col-md-10">
+
+						<div class="tab-content" id="detail-tabs"></div>
+
+							<div class="tab-pane fade show active" id="tab-intro" role="tabpanel">
+
+								<table id="detail-tabs-results">
+									<tr>
+										<td>Salary</td>
+										<td>{{salary | toINR}}</td>
+									</tr>
+									<tr>
+										<td>PF Withhold</td>
+										<td>- {{pfWithholdAmount | toINR}}</td>
+									</tr>
+									<tr>
+										<td>Income Tax</td>
+										<td>- {{incomeTaxAmount | toINR}}</td>
+									</tr>
+									<tr style="border-bottom: none; border-top: 2px solid gray;">
+										<td>Net Income</td>
+										<td>{{incomeNet | toINR}}</td>
+									</tr>
+								</table>
+
+							</div>
+
+							<div class="tab-pane fade" id="tab-pf-withhold" role="tabpanel">
+
+								<div class="row"></div>
+
+									<div class="col-md-6">
+										<p>
+											If you are a salaried employee and are an Indian Citizen (IC) or Indian permanent resident (IPR), every month, when paying out your salary, your employer is required to withhold the portion of your pay that needs to go into your PF accounts. That portion will be paid into your PF accounts as your employee's contribution.
+										</p>
+										<div>
+											<h3 class="nobottommargin">What is <span>PF</span></h3>
+										</div>
+										<p>
+											The Provident Fund (PF) is set up to play one of the most important functions in India's comprehensive social security system.
+										</p>
+										<p>
+											This is around 12% of your monthly salary, currently capped at ₹15,000. This means that the first ₹15,000 of your monthly salary is subject to PF contributions. Any amount above that won't have a portion deducted for PF.
+										</p>
+										<p style="font-size: 18px; font-weight: bold;">Your PF withhold is <b style="color: red;">{{pfWithholdAmount | toINR}}</b>.</p>
+									</div>
+
+									<div class="col-md-6">
+										<table class="table">
+											<thead class="thead-dark">
+												<tr>
+													<th><strong>Age of employee</strong></th>
+													<th><strong>PF withhold by employee</strong></th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td>Up to 55 years old</td>
+													<td>12%</td>
+												</tr>
+												<tr>
+													<td>55 to 60 years old</td>
+													<td>8%</td>
+												</tr>
+												<tr>
+													<td>60 to 65 years old</td>
+													<td>5%</td>
+												</tr>
+												<tr>
+													<td>Above 65 years old</td>
+													<td>3%</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+
+								</div>
+
+							</div>
+
+							<div class="tab-pane fade" id="tab-income-tax" role="tabpanel">
+
+								<div class="row">
+
+									<div class="col-md-6">
+										<p>
+											Income tax rates depend on an individual's tax residency status. You will be treated as a tax resident for a particular Year of Assessment (YA) if you are a:
+										</p>
+										<ol style="list-style-type:lower-alpha"></ol>
+											<li>Indian Citizen (IC) or Indian Permanent Resident (IPR) who resides in India except for temporary absences; or</li>
+											<li>Foreigner who has stayed / worked in India (excludes director of a company) for 183 days or more in the year preceding the YA.</li>
+										</ol>
+										<p></p>
+											Otherwise, you will be treated as a non-resident of India for tax purposes.
+										</p>
+										<p>
+											India's personal income tax rates for resident taxpayers are progressive. This means higher income earners pay a proportionately higher tax, with the current highest personal income tax rate at 30%.
+										</p>
+										<p style="font-size: 18px; font-weight: bold;">Your final Income Tax is <b style="color: red;">{{incomeTaxAmount | toINR}}</b>.</p>
+									</div>
+
+									<div class="col-md-6">
+										<table class="table">
+											<thead class="thead-dark">
+												<tr>
+													<th><strong>Annual Salary</strong></th>
+													<th><strong>Tax Rate</strong></th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td>0 - 2,50,000</td>
+													<td>0%</td>
+												</tr>
+												<tr>
+													<td>2,50,001 - 5,00,000</td>
+													<td>5%</td>
+												</tr>
+												<tr>
+													<td>5,00,001 - 10,00,000</td>
+													<td>20%</td>
+												</tr>
+												<tr>
+													<td>10,00,001 +</td>
+													<td>30%</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+
+								</div>
+
+							</div>
+
+						</div>
+
+					</div>
+
+				</div>
+
+			</div>
+
+		</section>
+
+		<section id="footer" style="padding: 0px 20px 0px 20px;">
+
+			<i18n path="about.title" tag="h2">
+				<template #website>
+					<span>India Tax Calculator</span>
+				</template>
+			</i18n>
+			<i18n path="about.content" tag="p">
+				<template #author>
+					<a href="https://github.com/hansliu/" target="_blank" rel="noreferrer noopener">Hans Liu</a>
+				</template>
+				<template #thanks_website>
+					<a href="https://japantaxcalculator.com/" target="_blank" rel="noreferrer noopener">Japan Tax Calculator</a>
+				</template>
+				<template #thanks_author>
+					<a href="https://jordymeow.com" target="_blank" rel="noreferrer noopener">Jordy Meow</a>
+				</template>
+				<template #github>
+					<a href="https://github.com/hansliu/india-tax-calculator" target="_blank" rel="noreferrer noopener">github</a>
+				</template>
+			</i18n>
+
+			<h3>{{ $t('disclaimer.title') }}</h3>
+			<p>{{ $t('disclaimer.content') }}</p>
+
+		</section>
+
+	</div><!-- #wrapper end -->
+
+	<div id="comments">
+		<script src="https://utteranc.es/client.js"
+			repo="hansliu/india-tax-calculator"
+			issue-term="indiataxcalculator"
+			label="comment"
+			theme="github-light"
+			crossorigin="anonymous"
+			async></script>
+		</script>
+	</div>
+
+	<!-- External JavaScripts
+		============================================= -->
+	<script type="application/javascript" src="https://unpkg.com/vue@2.7.16/dist/vue.min.js"></script>
+	<script type="application/javascript" src="https://unpkg.com/vue-i18n@8.28.2/dist/vue-i18n.min.js"></script>
+	<script type="application/javascript" src="indiataxi18n.js"></script>
+
+	<!-- Range Slider Plugin -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/js/ion.rangeSlider.min.js"
+		integrity="sha512-kZsqvmw94Y8hyhwtWZJvDtobwQ9pLhF1DuIvcqSuracbRn6WJs1Ih+04fpH/8d1CFKysp7XA1tR0Aa2jKLTQUg=="
+		crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/css/ion.rangeSlider.min.css"
+		integrity="sha512-NWCafukXClS6fKch6bSMl/WvPzZrD1OGMf1oMAnFYXSSKZ7hgeswls+r4SdK4bFJauVwmvFf7HlMwji2TsjROA=="
+		crossorigin="anonymous" />
+
+	<!-- Footer Scripts
+		============================================= -->
+	<script type="application/javascript">
+
+		function uiSalaryUpdate(data) {
+			app.uiSalary = data.from;
+		}
+
+		function rangeSalaryUpdate() {
+			var slider = jQuery(".salary-range").data("ionRangeSlider");
+			slider.update({
+				from: app.uiSalary
+			})
+		}
+
+		jQuery(document).ready(function () {
+			var slider = jQuery(".salary-range").ionRangeSlider({
+				grid: true,
+				min: 240000,
+				max: 3200000,
+				from: 754000,
+				step: 1000,
+				skin: "round",
+				hide_min_max: true,
+				hide_from_to: false,
+				//grid_snap: true,
+				prefix: '₹ ',
+				prettify_separator: ',',
+				prettify_enabled: true,
+				onChange: uiSalaryUpdate
+			});
+		});
+
+	</script>
+
+</body>
+
+</html>
