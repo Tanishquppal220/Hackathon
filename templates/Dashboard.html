@@ -79,9 +79,8 @@
                 <div class="chart-section">
                     <h2>Tax Breakdown</h2>
                     <div class="chart-container">
-                        <!-- Placeholder for charts -->
-                        <div class="chart-placeholder">Pie Chart: Income Slabs</div>
-                        <div class="chart-placeholder">Line Graph: Tax Liability Trend</div>
+                        <div id="income-pie-chart"></div>
+                        <div id="liability-trend"></div>
                     </div>
                 </div>
 
@@ -116,5 +115,37 @@
                 </div>
             </div>
         </section>
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                try {
+                    // Parse the JSON data passed from Flask
+                    const pieChart = JSON.parse('{{ pie_chart | safe }}');
+                    const lineChart = JSON.parse('{{ line_chart | safe }}');
+
+                    // Create the charts
+                    Plotly.newPlot('income-pie-chart', pieChart.data, pieChart.layout, {
+                        responsive: true,
+                        displayModeBar: false
+                    });
+
+                    Plotly.newPlot('liability-trend', lineChart.data, lineChart.layout, {
+                        responsive: true,
+                        displayModeBar: false
+                    });
+
+                    // Handle window resize
+                    window.addEventListener('resize', function () {
+                        Plotly.Plots.resize('income-pie-chart');
+                        Plotly.Plots.resize('liability-trend');
+                    });
+                } catch (error) {
+                    console.error('Error initializing charts:', error);
+                    document.getElementById('income-pie-chart').innerHTML = 'Error loading chart';
+                    document.getElementById('liability-trend').innerHTML = 'Error loading chart';
+                }
+            });
+        </script>
         <script src="{{ url_for('static', filename='js/quarters.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
     {% endblock %}

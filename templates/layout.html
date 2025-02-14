@@ -19,15 +19,56 @@
             <div class="links">
                 <ul>
                     <li><a href="/">Dashboard</a></li>
-                    <li><a href="/calc">Calculator</a></li>
-                    <li><a href="/learn">Learn About Tax</a></li>
+                    <li><a href="/calc">Tax Calculator</a></li>
+                    <li><a href="/chat">AI Chat</a></li>
+                    <li><a href="#timeline">Timeline</a></li>
                 </ul>
             </div>
         </div>
     </nav>
     {% block main %}
-        
+    <div class="suggestions-section">
+        <h2>AI Tax Insights</h2>
+        <div class="suggestion-cards">
+            <div class="suggestion-card">
+                <div class="suggestion-icon">💡</div>
+                <div class="suggestion-content">
+                    <h3>Tax Saving Tips</h3>
+                    <p>Discover smart ways to optimize your tax savings using Section 80C investments.</p>
+                    <a href="/chat" class="suggestion-link">Get Personalized Advice →</a>
+                </div>
+            </div>
+            
+            <div class="suggestion-card">
+                <div class="suggestion-icon">📊</div>
+                <div class="suggestion-content">
+                    <h3>Regime Comparison</h3>
+                    <p>Compare old vs new tax regimes to find which one suits you better.</p>
+                    <a href="/calc" class="suggestion-link">Calculate Now →</a>
+                </div>
+            </div>
+            
+            <div class="suggestion-card">
+                <div class="suggestion-icon">📅</div>
+                <div class="suggestion-content">
+                    <h3>Important Deadlines</h3>
+                    <p>Stay updated with upcoming tax filing and payment deadlines.</p>
+                    <a href="#timeline" class="suggestion-link">View Timeline →</a>
+                </div>
+            </div>
+            
+            <div class="suggestion-card">
+                <div class="suggestion-icon">🎯</div>
+                <div class="suggestion-content">
+                    <h3>Investment Planning</h3>
+                    <p>Get AI-powered suggestions for tax-saving investments.</p>
+                    <a href="/chat" class="suggestion-link">Plan Now →</a>
+                </div>
+            </div>
+            </div>
+            </div>
     {% endblock %}
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    {% block scripts %}{% endblock %}
 </body>
 </html>

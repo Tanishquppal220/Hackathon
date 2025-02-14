@@ -39,12 +39,56 @@
 
 input[type="range"] {
     -webkit-appearance: none;
+    appearance: none;
     width: 100%;
     height: 8px;
     border-radius: 5px;
     background: linear-gradient(90deg, var(--accent), var(--primary-light));
     outline: none;
     margin: 1rem 0;
+    cursor: pointer;
+    }
+    
+    /* Add support for Firefox */
+    input[type="range"]::-moz-range-thumb {
+        width: 24px;
+        height: 24px;
+        background: white;
+        border: 3px solid var(--primary);
+        border-radius: 50%;
+        cursor: pointer;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;
+    }
+    
+    /* Add support for Microsoft Edge/IE */
+    input[type="range"]::-ms-thumb {
+        width: 24px;
+        height: 24px;
+        background: white;
+        border: 3px solid var(--primary);
+        border-radius: 50%;
+        cursor: pointer;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;
+    }
+    
+    /* Track styles for Firefox */
+    input[type="range"]::-moz-range-track {
+        width: 100%;
+        height: 8px;
+        background: linear-gradient(90deg, var(--accent), var(--primary-light));
+        border-radius: 5px;
+    }
+    
+    /* Track styles for IE/Edge */
+    input[type="range"]::-ms-track {
+        width: 100%;
+        height: 8px;
+        background: transparent;
+        border-radius: 5px;
+        color: transparent;
+        border: none;
 }
 
 input[type="range"]::-webkit-slider-thumb {
@@ -161,6 +205,34 @@ select:focus, input:focus {
     color: var(--text-light);
 }
 
+.calculated-deductions {
+    background: rgba(255, 255, 255, 0.8);
+    padding: 1rem;
+    border-radius: 10px;
+    margin-top: 1rem;
+    border: 1px solid var(--primary);
+}
+
+.calculated-deductions h4 {
+    color: var(--primary);
+    margin-bottom: 1rem;
+}
+
+.checkbox-input {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.checkbox-input input[type="checkbox"] {
+    width: auto;
+}
+
+input[readonly] {
+    background-color: #f0f0f0;
+    cursor: not-allowed;
+}
 /* Responsive Design */
 @media (max-width: 768px) {
     .calculator-container {
@@ -176,4 +248,125 @@ select:focus, input:focus {
     .status-option {
         width: 100%;
     }
+}
+
+.hra-breakdown-container {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    border: 1px dashed var(--primary);
+}
+
+.hra-breakdown {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.hra-breakdown p {
+    color: var(--primary);
+    font-size: 0.9rem;
+    display: flex;
+    justify-content: space-between;
+    padding: 0.3rem 0;
+    border-bottom: 1px solid rgba(74, 20, 140, 0.1);
+}
+
+.deductions-summary {
+    background: linear-gradient(145deg, #ffffff, #f8f3ff);
+    padding: 1.2rem;
+    border-radius: 15px;
+    margin: 1rem 0;
+    border: 1px solid rgba(74, 20, 140, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.deductions-summary p {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px dashed rgba(74, 20, 140, 0.1);
+    color: var(--primary);
+}
+
+.deductions-summary p.total {
+    border-bottom: none;
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 2px solid var(--primary);
+}
+
+.regime-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.regime-option {
+    padding: 1.2rem;
+    border: 2px solid var(--primary);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.regime-option h4 {
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+}
+
+.regime-option .regime-desc {
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.regime-option.selected {
+    background: var(--primary);
+    color: white;
+}
+
+.regime-option.selected h4,
+.regime-option.selected .regime-desc {
+    color: white;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .regime-options {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* AI Advice Styles */
+.ai-advice {
+    background: linear-gradient(145deg, #ffffff, #f8f3ff);
+    padding: 1.5rem;
+    border-radius: 15px;
+    margin: 1.5rem 0;
+    border: 1px solid rgba(74, 20, 140, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.ai-advice h3 {
+    color: var(--primary);
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.ai-advice h3::before {
+    content: '🤖';
+}
+
+.advice-content {
+    color: var(--primary);
+    font-size: 0.95rem;
+    line-height: 1.5;
 }

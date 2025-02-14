@@ -1,11 +1,14 @@
 {% extends 'layout.html' %}
 
-{% block title %}
-    Tax Calculator
-{% endblock %}
+{% block title %}Tax Calculator{% endblock %}
 
 {% block head %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/calculator.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/calculator-animations.css') }}">
+    {% endblock %}
+    
+    {% block scripts %}
+    <script src="{{ url_for('static', filename='js/calculator.js') }}"></script>
 {% endblock %}
 
 {% block main %}
@@ -85,6 +88,104 @@
                     </div>
                 </div>
 
+                <div class="regime-select-container">
+                    <label class="input-label">Select Tax Regime:</label>
+                    <div class="regime-options">
+                        <div class="regime-option selected" onclick="selectRegime('new')" id="newRegimeOption">
+                            <h4>New Regime</h4>
+                            <p class="regime-desc">Lower tax rates without deductions</p>
+                        </div>
+                        <div class="regime-option" onclick="selectRegime('old')" id="oldRegimeOption">
+                            <h4>Old Regime</h4>
+                            <p class="regime-desc">Higher rates with deductions & exemptions</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="regimeComparison" class="regime-comparison-container"></div>
+                
+                <div class="deductions-container" id="deductionsContainer">
+                    <h3>Deductions Calculator (Old Regime)</h3>
+                
+                    <!-- Salary Components -->
+                    <div class="deduction-input">
+                        <label for="basicSalary">Basic Salary (Annual):</label>
+                        <input type="number" id="basicSalary" min="0" value="0" onchange="autoCalculateDeductions()">
+                    </div>
+                
+                    <!-- HRA Components -->
+                    <div class="deduction-input">
+                        <label for="rentPaid">Monthly Rent Paid:</label>
+                        <input type="number" id="rentPaid" min="0" value="0" onchange="autoCalculateDeductions()">
+                        <div class="checkbox-input">
+                            <input type="checkbox" id="isMetroCity" onchange="autoCalculateDeductions()">
+                            <label for="isMetroCity">Metro City</label>
+                        </div>
+                    </div>
+                
+                    <!-- Add this after the HRA inputs -->
+                    <div id="hraBreakdown" class="hra-breakdown-container"></div>
+                
+                    <!-- Calculated Deductions -->
+                    <div class="calculated-deductions hidden">
+                        <h4>Optimized Deductions</h4>
+                        <div class="deduction-input">
+                            <label for="section80C">Section 80C (max ₹1.5L):</label>
+                            <input type="number" id="section80C" min="0" max="150000" value="0" readonly>
+                        </div>
+                        <div class="deduction-input">
+                            <label for="section80D">Section 80D:</label>
+                            <input type="number" id="section80D" min="0" value="0" readonly>
+                        </div>
+                        <div class="deduction-input">
+                            <label for="hra">HRA Exemption:</label>
+                            <input type="number" id="hra" min="0" value="0" readonly>
+                        </div>
+                    </div>
+                
+                    <!-- Enhanced breakdown display -->
+                    <div id="deductionsBreakdown" class="deductions-breakdown">
+                        <!-- Will be populated by JavaScript -->
+                    </div>
+                </div>
+                
+                <div class="additional-taxes-container" id="additionalTaxesContainer">
+                    <h3>Additional Tax Calculations</h3>
+                
+                    <!-- Property Tax Section -->
+                    <div class="tax-section">
+                        <h4>Property Tax</h4>
+                        <div class="input-group">
+                            <input type="number" id="propertyValue" placeholder="Property Value">
+                            <select id="propertyLocation">
+                                <option value="metro">Metro City</option>
+                                <option value="urban">Urban Area</option>
+                                <option value="rural">Rural Area</option>
+                            </select>
+                            <button onclick="taxHandler.addPropertyDetail()">Add Property</button>
+                        </div>
+                        <div id="propertyList" class="items-list"></div>
+                    </div>
+                
+                    <!-- Capital Gains Section -->
+                    <div class="tax-section">
+                        <h4>Capital Gains</h4>
+                        <div class="input-group">
+                            <select id="assetType">
+                                <option value="equity">Equity Shares</option>
+                                <option value="property">Property</option>
+                                <option value="other">Other Assets</option>
+                            </select>
+                            <input type="number" id="buyPrice" placeholder="Purchase Price">
+                            <input type="date" id="buyDate">
+                            <input type="number" id="sellPrice" placeholder="Selling Price">
+                            <input type="date" id="sellDate">
+                            <button onclick="taxHandler.addCapitalGain()">Add Capital Gain</button>
+                        </div>
+                        <div id="capitalGainsList" class="items-list"></div>
+                    </div>
+                </div>
+
                 <div class="result-box" id="taxAmountBox">Income Tax:  0</div>
                 <div class="details-box">
                     <h3>Details</h3>
@@ -92,6 +193,8 @@
                     <p>Income Tax: <span id="taxAmount">-</span></p>
                 </div>
                 <button class="calculate-tax-btn" onclick="calculateTax()">Calculate Tax</button>
+                <!-- Add this before the tax-laws div -->
+                <div id="aiAdvice" class="ai-advice-container"></div>
                 <div class="tax-laws">
                     <h2>Indian Tax Laws</h2>
                     <p>India's tax system is governed by the Income Tax Act of 1961. Key provisions include the classification
@@ -104,170 +207,6 @@
                         planning and compliance.</p>
                 </div>
             </div>
-
-            <script>
-                let currentSalary = 1000000;
-                let selectedStatus = 'resident';
-
-                function formatAmount(amount) {
-                    if (amount >= 10000000) {
-                        return '₹' + (amount / 10000000).toFixed(2) + ' Cr';
-                    } else if (amount >= 100000) {
-                        return '₹' + (amount / 100000).toFixed(1) + ' L';
-                    }
-                    return '₹' + amount.toLocaleString('en-IN');
-                }
-
-                function updateDisplay(value) {
-                    currentSalary = Number(value);
-                    document.getElementById('sliderValue').textContent = formatAmount(currentSalary);
-                    document.getElementById('salaryAmount').textContent = formatAmount(currentSalary);
-                    document.getElementById('manualSalary').value = currentSalary;
-                    document.getElementById('salarySlider').value = currentSalary;
-                }
-
-                function handleTaxpayerChange() {
-                    const taxpayerCategory = document.getElementById('taxpayerCategory').value;
-                    const ageCategoryContainer = document.getElementById('ageCategoryContainer');
-                    const residentialStatusContainer = document.getElementById('residentialStatusContainer');
-
-                    if (taxpayerCategory === 'individual') {
-                        ageCategoryContainer.classList.add('visible');
-                        residentialStatusContainer.classList.add('visible');
-                    } else {
-                        ageCategoryContainer.classList.remove('visible');
-                        residentialStatusContainer.classList.remove('visible');
-                    }
-
-                    calculateTax();
-                }
-
-                function selectStatus(status) {
-                    selectedStatus = status;
-                    document.querySelectorAll('.status-option').forEach(opt => {
-                        opt.classList.remove('selected');
-                    });
-                    document.getElementById($,{ status },Option).classList.add('selected');
-                    calculateTax();
-                }
-
-                function calculateTax() {
-                    let tax = 0;
-                    let salary = currentSalary;
-                    const taxpayerCategory = document.getElementById('taxpayerCategory').value;
-                    const ageCategory = document.getElementById('ageCategory').value;
-
-                    if (taxpayerCategory === 'individual') {
-                        // Apply residential status modifications
-                        let basicExemption = 250000;
-                        let surchargeRate = 0.1; // 10% default
-
-                        switch (selectedStatus) {
-                            case 'resident':
-                                // Standard tax calculation
-                                break;
-                            case 'nri':
-                                basicExemption = 250000;
-                                surchargeRate = 0.15; // Higher surcharge for NRIs
-                                break;
-                            case 'rnor':
-                                basicExemption = 250000;
-                                surchargeRate = 0.12; // Medium surcharge for RNOR
-                                break;
-                        }
-
-                        // Existing age-based calculations with modified exemption
-                        switch (ageCategory) {
-                            case 'general':
-                                // Existing tax calculation for below 60
-                                if (salary <= 300000) {
-                                    tax = 0;
-                                } else if (salary <= 600000) {
-                                    tax = (salary - 300000) * 0.05;
-                                } else if (salary <= 900000) {
-                                    tax = 15000 + (salary - 600000) * 0.10;
-                                } else if (salary <= 1200000) {
-                                    tax = 45000 + (salary - 900000) * 0.15;
-                                } else if (salary <= 1500000) {
-                                    tax = 90000 + (salary - 1200000) * 0.20;
-                                } else {
-                                    tax = 150000 + (salary - 1500000) * 0.30;
-                                }
-                                break;
-
-                            case 'senior':
-                                // Tax calculation for senior citizens (60-80 years)
-                                if (salary <= 300000) {
-                                    tax = 0;
-                                } else if (salary <= 500000) {
-                                    tax = (salary - 300000) * 0.05;
-                                } else if (salary <= 1000000) {
-                                    tax = 10000 + (salary - 500000) * 0.20;
-                                } else {
-                                    tax = 110000 + (salary - 1000000) * 0.30;
-                                }
-                                break;
-
-                            case 'super-senior':
-                                // Tax calculation for super senior citizens (above 80 years)
-                                if (salary <= 500000) {
-                                    tax = 0;
-                                } else if (salary <= 1000000) {
-                                    tax = (salary - 500000) * 0.20;
-                                } else {
-                                    tax = 100000 + (salary - 1000000) * 0.30;
-                                }
-                                break;
-                        }
-
-                        // Apply surcharge if applicable (for income > 50L)
-                        if (salary > 5000000) {
-                            const baseTax = tax;
-                            tax += baseTax * surchargeRate;
-                        }
-                    } else {
-                        // Existing non-individual tax calculation
-                        if (salary <= 300000) {
-                            tax = 0;
-                        } else if (salary <= 600000) {
-                            tax = (salary - 300000) * 0.05;
-                        } else if (salary <= 900000) {
-                            tax = 15000 + (salary - 600000) * 0.10;
-                        } else if (salary <= 1200000) {
-                            tax = 45000 + (salary - 900000) * 0.15;
-                        } else if (salary <= 1500000) {
-                            tax = 90000 + (salary - 1200000) * 0.20;
-                        } else {
-                            tax = 150000 + (salary - 1500000) * 0.30;
-                        }
-                    }
-
-                    // Add 4% cess
-                    tax = tax + (tax * 0.04);
-
-                    document.getElementById("taxAmount").innerText = formatAmount(tax);
-                    document.getElementById("taxAmountBox").innerText = "Income Tax: " + formatAmount(tax);
-                }
-
-                // Initialize
-                window.onload = function () {
-                    const slider = document.getElementById('salarySlider');
-                    const manualInput = document.getElementById('manualSalary');
-
-                    slider.addEventListener('input', (e) => updateDisplay(e.target.value));
-                    manualInput.addEventListener('input', (e) => {
-                        let value = Number(e.target.value);
-                        value = Math.min(Math.max(value, 0), 50000000);
-                        updateDisplay(value);
-                    });
-
-                    document.getElementById('taxpayerCategory').addEventListener('change', handleTaxpayerChange);
-                    handleTaxpayerChange(); // Initial check
-
-                    updateDisplay(currentSalary);
-                    selectStatus('resident'); // Set default status
-                }
-            </script>
         </body>
 
         </html>
