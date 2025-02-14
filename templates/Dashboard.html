@@ -1,0 +1,143 @@
+{% extends 'layout.html' %}
+
+    {% block title %}
+        Dashboard
+    {% endblock %}
+
+    {% block main %}
+        <section class="hero">
+            <div class="hero-content">
+                <h1 class="headline">Confused About Taxes? Let TaxGuru Simplify It For You!</h1>
+                <p class="subtext">Calculate your tax in seconds. Compare regimes. Save smarter. Learn effortlessly.</p>
+                <div class="cta-buttons">
+                    <a href="/calc" class="cta-button primary">Calculate Now</a>
+                    <a href="/learn" class="cta-button secondary">Learn More</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="fy-timeline">
+            <div class="timeline-header">
+                <h2>Financial Year 2023-24</h2>
+                <div class="timeline-controls">
+                    <button class="quarter-nav" data-quarter="prev">←</button>
+                    <span class="current-quarter">Q3 (Oct-Dec)</span>
+                    <button class="quarter-nav" data-quarter="next">→</button>
+                </div>
+            </div>
+            <div class="timeline-grid">
+                <!-- October -->
+                <div class="month-card current">
+                    <div class="month-header">
+                        <h3>October</h3>
+                        <span class="tax-due">₹12,500</span>
+                    </div>
+                    <div class="month-events">
+                        <div class="event due">
+                            <span class="event-date">15 Oct</span>
+                            <span class="event-label">Advance Tax Due</span>
+                        </div>
+                        <div class="event completed">
+                            <span class="event-date">05 Oct</span>
+                            <span class="event-label">Form 16 Updated</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- November -->
+                <div class="month-card upcoming">
+                    <div class="month-header">
+                        <h3>November</h3>
+                        <span class="tax-due">₹15,000</span>
+                    </div>
+                    <div class="month-events">
+                        <div class="event pending">
+                            <span class="event-date">30 Nov</span>
+                            <span class="event-label">80C Investment Due</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- December -->
+                <div class="month-card upcoming">
+                    <div class="month-header">
+                        <h3>December</h3>
+                        <span class="tax-due">₹15,000</span>
+                    </div>
+                    <div class="month-events">
+                        <div class="event upcoming">
+                            <span class="event-date">31 Dec</span>
+                            <span class="event-label">HRA Proof Submission</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="dashboard">
+            <!-- Left Sidebar -->
+            <div class="insights-panel">
+                <div class="panel-section">
+                    <h2>Key Tax Metrics</h2>
+                    <div class="metric-card">
+                        <h3>Current FY Tax Regime</h3>
+                        <p class="highlight">New Regime</p>
+                    </div>
+                    <div class="metric-card">
+                        <h3>Total Tax Saved (YTD)</h3>
+                        <p class="highlight money">23,500</p>
+                        <span class="sub-text">via exemptions</span>
+                    </div>
+                    <div class="metric-card">
+                        <h3>Projected Tax Liability</h3>
+                        <p class="highlight money">1,12,000</p>
+                        <span class="sub-text">Last Year: ₹1,45,000</span>
+                    </div>
+                </div>
+
+                <div class="panel-section">
+                    <h2>Exemption Utilization</h2>
+                    <div class="progress-card">
+                        <div class="progress-header">
+                            <span>Section 80C</span>
+                            <span>₹1.2L / ₹1.5L</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress" style="width: 80%"></div>
+                        </div>
+                    </div>
+                    <div class="progress-card">
+                        <div class="progress-header">
+                            <span>Section 80D</span>
+                            <span>₹20K / ₹25K</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress" style="width: 75%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="main-content">
+                <div class="chart-section">
+                    <h2>Tax Breakdown</h2>
+                    <div class="chart-container">
+                        <!-- Placeholder for charts -->
+                        <div class="chart-placeholder">Pie Chart: Income Slabs</div>
+                        <div class="chart-placeholder">Line Graph: Tax Liability Trend</div>
+                    </div>
+                </div>
+
+                <div class="ai-suggestions">
+                    <h2>AI Suggestions</h2>
+                    <div class="suggestion-card">
+                        <div class="suggestion-icon">💡</div>
+                        <div class="suggestion-content">
+                            <h3>Investment Opportunity</h3>
+                            <p>Invest ₹30k in ELSS to save ₹4.5k under 80C</p>
+                            <a href="/calc" class="suggestion-link">Calculate Savings →</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    {% endblock %}
