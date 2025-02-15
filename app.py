@@ -166,12 +166,35 @@ def learning_content(page):
 def calculate():
     data = request.json
     try:
-        result = calculate_tax(
+        tax_result = calculate_tax(
             income=data['income'],
             regime_type=data['regime'],
             age_category=data['age_category'],
             deductions=data.get('deductions')
         )
+        
+        # Add income breakdown
+        result = {
+            "tax_breakdown": tax_result,
+            "totalIncome": data['income'],
+            "incomeBreakdown": [
+                {
+                    "description": "Basic Salary",
+                    "amount": data['income']
+                }
+            ],
+            "deductionsBreakdown": [],
+            "finalTax": tax_result['tax']
+        }
+
+        # Add deductions if any
+        if data.get('deductions'):
+            for key, value in data['deductions'].items():
+                if value:
+                    result["deductionsBreakdown"].append({
+                        "description": f"Section {key}",
+                        "amount": value
+                    })
         
         # Calculate comparison with other regime
         other_regime = "old" if data['regime'] == "new" else "new"
@@ -181,16 +204,18 @@ def calculate():
             age_category=data['age_category']
         )
         
-        return jsonify({
-            "tax_breakdown": result,
-            "regime_comparison": {
-                "current_regime": result["tax"],
-                "other_regime": comparison["tax"]
-            },
-            "optimization_opportunities": generate_optimization_suggestions(data, result)
-        })
+        result["regime_comparison"] = {
+            "new_regime": comparison["tax"] if data['regime'] == "old" else tax_result["tax"],
+            "old_regime": tax_result["tax"] if data['regime'] == "old" else comparison["tax"]
+        }
+
+        # Add optimization suggestions
+        result["optimization_opportunities"] = generate_optimization_suggestions(data, tax_result)
+        
+        return jsonify(result)
         
     except Exception as e:
+        print(f"Error in tax calculation: {str(e)}")
         return jsonify({"error": str(e)}), 400
 
 def generate_optimization_suggestions(data, result):
@@ -324,6 +349,54 @@ def generate_tax_advice(income, regime, current_tax):
     if regime == "old" and income < 1500000:
         advice.append("Consider NPS investment for additional tax benefits under 80CCD(1B)")
     return "\n".join(advice) or "No specific tax saving opportunities identified at this time."
+
+@app.route('/deduction-suggestions', methods=['POST'])
+def get_deduction_suggestions():
+    data = request.json
+    income = data.get('income', 0)
+    profession = data.get('profession', '')
+    age = int(data.get('age', 0))
+    
+    # Base suggestions that most people can claim
+    suggestions = [
+        {
+            "title": "Interest on Education Loan",
+            "description": "Interest paid on education loans for higher education is deductible under section 80E with no upper limit.",
+            "section": "80E",
+            "maxAmount": None
+        },
+        {
+            "title": "Interest on Savings Account",
+            "description": "Interest earned from savings account is deductible up to ₹10,000 under section 80TTA.",
+            "section": "80TTA",
+            "maxAmount": 10000
+        },
+        {
+            "title": "NPS Contribution",
+            "description": "Additional deduction of up to ₹50,000 for National Pension System contributions under section 80CCD(1B).",
+            "section": "80CCD(1B)",
+            "maxAmount": 50000
+        }
+    ]
+    
+    # Add more specific suggestions based on profession and age
+    if profession == "individual" and income > 500000:
+        suggestions.append({
+            "title": "Preventive Health Check-up",
+            "description": "Deduction up to ₹5,000 for preventive health check-ups under section 80D.",
+            "section": "80D",
+            "maxAmount": 5000
+        })
+    
+    if age > 60:
+        suggestions.append({
+            "title": "Senior Citizen Savings Scheme",
+            "description": "Interest from Senior Citizen Savings Scheme is deductible under section 80TTB up to ₹50,000.",
+            "section": "80TTB",
+            "maxAmount": 50000
+        })
+    
+    return jsonify(suggestions)
 
 if __name__ == '__main__':
     app.run(debug=True)

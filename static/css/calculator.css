@@ -1,7 +1,7 @@
 .calculator-container {
     max-width: 1200px;
     margin: 150px auto 1.5rem auto;
-        /* Increased from 100px to 150px */
+    /* Increased from 100px to 150px */
         padding: 2rem;
         /* Increased padding for better spacing */
     background: rgba(255, 255, 255, 0.95);
@@ -47,48 +47,48 @@ input[type="range"] {
     outline: none;
     margin: 1rem 0;
     cursor: pointer;
-    }
-    
-    /* Add support for Firefox */
-    input[type="range"]::-moz-range-thumb {
-        width: 24px;
-        height: 24px;
-        background: white;
-        border: 3px solid var(--primary);
-        border-radius: 50%;
-        cursor: pointer;
-        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-        transition: all 0.3s ease;
-    }
-    
-    /* Add support for Microsoft Edge/IE */
-    input[type="range"]::-ms-thumb {
-        width: 24px;
-        height: 24px;
-        background: white;
-        border: 3px solid var(--primary);
-        border-radius: 50%;
-        cursor: pointer;
-        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-        transition: all 0.3s ease;
-    }
-    
-    /* Track styles for Firefox */
-    input[type="range"]::-moz-range-track {
-        width: 100%;
-        height: 8px;
-        background: linear-gradient(90deg, var(--accent), var(--primary-light));
-        border-radius: 5px;
-    }
-    
-    /* Track styles for IE/Edge */
-    input[type="range"]::-ms-track {
-        width: 100%;
-        height: 8px;
-        background: transparent;
-        border-radius: 5px;
-        color: transparent;
-        border: none;
+}
+
+/* Add support for Firefox */
+input[type="range"]::-moz-range-thumb {
+    width: 24px;
+    height: 24px;
+    background: white;
+    border: 3px solid var(--primary);
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+/* Add support for Microsoft Edge/IE */
+input[type="range"]::-ms-thumb {
+    width: 24px;
+    height: 24px;
+    background: white;
+    border: 3px solid var(--primary);
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+/* Track styles for Firefox */
+input[type="range"]::-moz-range-track {
+    width: 100%;
+    height: 8px;
+    background: linear-gradient(90deg, var(--accent), var(--primary-light));
+    border-radius: 5px;
+}
+
+/* Track styles for IE/Edge */
+input[type="range"]::-ms-track {
+    width: 100%;
+    height: 8px;
+    background: transparent;
+    border-radius: 5px;
+    color: transparent;
+    border: none;
 }
 
 input[type="range"]::-webkit-slider-thumb {
@@ -119,7 +119,8 @@ input[type="range"]::-webkit-slider-thumb {
     display: block;
 }
 
-select, input[type="number"] {
+select,
+input[type="number"] {
     width: 100%;
     padding: 0.8rem;
     border: 1px solid rgba(74, 20, 140, 0.1);
@@ -130,7 +131,8 @@ select, input[type="number"] {
     transition: all 0.3s ease;
 }
 
-select:focus, input:focus {
+select:focus,
+input:focus {
     outline: none;
     border-color: var(--primary);
     box-shadow: 0 0 0 2px rgba(74, 20, 140, 0.1);
@@ -148,25 +150,67 @@ select:focus, input:focus {
     box-shadow: 0 4px 15px var(--shadow);
 }
 
+/* Update Calculate Tax Button Styles */
 .calculate-tax-btn {
-    background: var(--primary);
-    color: var(--text-light);
-    padding: 1rem 2rem;
+    background: #521690;
+        color: white;
+        padding: 1.2rem 4rem;
     border: none;
-    border-radius: 25px;
-    font-size: 1.1rem;
+    border-radius: 30px;
+        font-size: 1.3rem;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
     display: block;
-    margin: 1.5rem auto;
-    width: fit-content;
+    margin: 2rem auto;
+        width: auto;
+        min-width: 250px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        box-shadow: 0 4px 15px rgba(74, 20, 140, 0.2);
+        position: relative;
+        overflow: hidden;
 }
 
 .calculate-tax-btn:hover {
-    background: var(--primary-light);
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px var(--shadow);
+    transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(74, 20, 140, 0.3);
+        background: linear-gradient(135deg, var(--primary-light), var(--primary));
+    }
+    
+    .calculate-tax-btn:active {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 15px rgba(74, 20, 140, 0.2);
+    }
+    
+    /* Add a subtle pulse animation */
+    @keyframes buttonPulse {
+        0% {
+            box-shadow: 0 4px 15px rgba(74, 20, 140, 0.2);
+        }
+    
+        50% {
+            box-shadow: 0 4px 25px rgba(74, 20, 140, 0.4);
+        }
+    
+        100% {
+            box-shadow: 0 4px 15px rgba(74, 20, 140, 0.2);
+        }
+    }
+    
+    .calculate-tax-btn {
+        animation: buttonPulse 2s infinite;
+    }
+    
+    /* Responsive adjustments for the button */
+    @media (max-width: 768px) {
+        .calculate-tax-btn {
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            min-width: 200px;
+            width: 90%;
+            margin: 1.5rem auto;
+        }
 }
 
 /* Container Styles */
@@ -233,11 +277,12 @@ input[readonly] {
     background-color: #f0f0f0;
     cursor: not-allowed;
 }
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .calculator-container {
         margin: 120px 1rem 1rem 1rem;
-            /* Increased from 80px to 120px for mobile */
+        /* Increased from 80px to 120px for mobile */
             padding: 1.5rem;
     }
 
@@ -369,4 +414,600 @@ input[readonly] {
     color: var(--primary);
     font-size: 0.95rem;
     line-height: 1.5;
+}
+/* Multi-step form styles */
+.progress-bar {
+    width: 100%;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.2);
+    margin: 1rem 0;
+    border-radius: 2px;
+}
+
+.progress {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 2px;
+    transition: width 0.3s ease;
+}
+
+.form-step {
+    display: none;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.form-navigation {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.form-navigation button {
+    background: var(--primary);
+    color: var(--text-light);
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.form-navigation button:hover {
+    background: var(--primary-light);
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px var(--shadow);
+}
+
+.capital-gain-entry,
+.deduction-entry {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 10px;
+    margin-bottom: 1rem;
+}
+
+.remove-btn {
+    background: #dc2626;
+    color: white;
+    border: none;
+    padding: 0.5rem;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.tax-calculation-summary {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.breakdown {
+    margin: 1rem 0;
+}
+
+.breakdown-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px dashed rgba(0, 0, 0, 0.1);
+}
+
+.deduction {
+    color: #dc2626;
+}
+
+.final-tax {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 2px solid var(--primary);
+    text-align: center;
+}
+
+.form-navigation {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.add-btn {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 1rem;
+}
+
+.error {
+    border-color: #dc2626;
+}
+
+/* Remove step-based styles and add section styles */
+.form-sections {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.form-section {
+    background: linear-gradient(145deg, #ffffff, #f8f3ff);
+    padding: 1.5rem;
+    border-radius: 15px;
+    border: 1px solid rgba(74, 20, 140, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.form-section h2 {
+    color: var(--primary);
+    font-size: 1.3rem;
+    margin-bottom: 1.2rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid rgba(74, 20, 140, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .grid-2 {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Results section specific styles */
+.results-section {
+    background: linear-gradient(145deg, #ffffff, #f8f3ff);
+    border: 2px solid var(--primary);
+}
+
+/* Remove progress bar and navigation styles */
+.progress-bar,
+.form-navigation {
+    display: none;
+}
+
+/* Enhance calculate button */
+.calculate-tax-btn {
+    margin-top: 2rem;
+    padding: 1rem 3rem;
+    font-size: 1.2rem;
+    /* background: linear-gradient(135deg, var(--primary), var (--primary-light)); */
+}
+
+/* Salary Input Styles */
+.salary-input-container {
+    position: relative;
+    margin-top: 0.5rem;
+}
+
+.salary-input-container input[type="range"] {
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.salary-input-container input[type="number"] {
+    width: calc(100% - 80px);
+    display: inline-block;
+}
+
+.salary-display {
+    position: absolute;
+    right: 0;
+    top: 40px;
+    background: var(--primary);
+    color: white;
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+/* Gender Radio Styles */
+.gender-radio-group {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.5rem;
+    width: 100%;
+}
+
+.radio-option {
+    flex: 1;
+    position: relative;
+    width: calc(33.333% - 0.667rem);
+    /* Equal width for each option accounting for gaps */
+}
+
+.radio-option label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.8rem;
+    border: 2px solid var(--primary);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    gap: 0.5rem;
+    width: 100%;
+    /* Ensure label takes full width of parent */
+    height: 100%;
+    /* Ensure consistent height */
+    justify-content: center;
+    /* Center content vertically */
+}
+
+/* Responsive adjustments for gender cards */
+@media (max-width: 768px) {
+    .gender-radio-group {
+        flex-direction: row;
+        /* Keep horizontal layout even on mobile */
+        gap: 0.5rem;
+        /* Reduce gap on mobile */
+    }
+
+    .radio-option {
+        width: calc(33.333% - 0.333rem);
+        /* Adjust width calculation for smaller gap */
+    }
+
+    .radio-icon {
+        font-size: 1.2rem;
+        /* Slightly smaller icons on mobile */
+    }
+}
+
+.radio-option input[type="radio"] {
+    display: none;
+}
+
+.radio-option label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.8rem;
+    border: 2px solid var(--primary);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    gap: 0.5rem;
+}
+
+.radio-icon {
+    font-size: 1.5rem;
+}
+
+.radio-option input[type="radio"]:checked+label {
+    background: var(--primary);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.radio-option:hover label {
+    background: rgba(74, 20, 140, 0.1);
+}
+
+/* Info Icon Styles - Updated to always show */
+.info-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    font-size: 0.9rem;
+    color: var(--primary);
+    cursor: help;
+    opacity: 1;
+    /* Changed from 0 to 1 */
+    position: relative;
+    margin-left: 8px;
+    vertical-align: top;
+    transition: transform 0.3s ease;
+    /* Changed from opacity to transform */
+}
+
+/* Remove hover visibility rules */
+h2:hover .info-icon,
+h3:hover .info-icon,
+label:hover .info-icon {
+    opacity: 1;
+    /* Remove these rules */
+}
+
+/* Add hover effect */
+.info-icon:hover {
+    transform: scale(1.1);
+    /* Add scale effect on hover instead */
+    color: var(--primary-light);
+}
+
+.info-icon[data-tooltip]:before {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 8px 12px;
+    background: var(--primary);
+    color: white;
+    font-size: 0.85rem;
+    font-weight: normal;
+    border-radius: 6px;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    pointer-events: none;
+    width: 250px;
+    white-space: normal;
+    word-wrap: break-word;
+    line-height: 1.4;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+}
+
+/* Position the tooltip better for mobile */
+@media (max-width: 768px) {
+    .info-icon[data-tooltip]:before {
+        width: 200px;
+        left: auto;
+        right: 0;
+        transform: none;
+    }
+
+    .info-icon[data-tooltip]:after {
+        left: auto;
+        right: 10px;
+        transform: none;
+    }
+}
+
+.info-icon[data-tooltip]:after {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: var(--primary);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.info-icon:hover[data-tooltip]:before,
+.info-icon:hover[data-tooltip]:after {
+    opacity: 1;
+    visibility: visible;
+    bottom: 130%;
+}
+
+.ai-deduction-suggestions {
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    border: 1px dashed var(--primary);
+}
+
+.suggestion-card {
+    padding: 0.8rem;
+    margin-bottom: 0.8rem;
+    border-radius: 8px;
+    background: white;
+    border: 1px solid rgba(74, 20, 140, 0.1);
+    transition: all 0.3s ease;
+}
+
+.suggestion-card:hover {
+    background: #f8f3ff;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.suggestion-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--primary);
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+}
+
+.suggestion-title::before {
+    content: '💡';
+}
+
+.suggestion-description {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 0.5rem;
+}
+
+.suggestion-amount {
+    font-size: 0.85rem;
+    color: #16a34a;
+    font-weight: 500;
+}
+
+.apply-suggestion {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 0.4rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    float: right;
+    transition: all 0.3s ease;
+}
+
+.apply-suggestion:hover {
+    background: var(--primary-light);
+    transform: translateY(-1px);
+}
+
+.suggestion-loading {
+    text-align: center;
+    color: #666;
+    padding: 1rem;
+}
+
+/* Subheading Info Icon Styles */
+h3 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+h3 .info-icon {
+    font-size: 0.8rem;
+    width: 18px;
+    height: 18px;
+}
+
+h3:hover .info-icon {
+    opacity: 1;
+}
+
+h3 .info-icon[data-tooltip]:before {
+    width: 200px;
+    font-size: 0.8rem;
+}
+
+/* Position tooltips for subsection info icons */
+.income-section h3 .info-icon[data-tooltip]:before,
+.deductions-section h3 .info-icon[data-tooltip]:before {
+    left: 0;
+    transform: none;
+}
+
+.income-section h3 .info-icon[data-tooltip]:after,
+.deductions-section h3 .info-icon[data-tooltip]:after {
+    left: 10px;
+    transform: none;
+}
+
+/* Label Info Icon Styles */
+label .info-icon {
+    font-size: 0.75rem;
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
+    margin-left: 4px;
+}
+
+label:hover .info-icon {
+    opacity: 1;
+}
+
+label .info-icon[data-tooltip]:before {
+    width: 180px;
+    font-size: 0.8rem;
+    padding: 6px 10px;
+}
+
+/* Position tooltips for input labels */
+.input-group label .info-icon[data-tooltip]:before {
+    bottom: 140%;
+    left: 0;
+    transform: none;
+}
+
+.input-group label .info-icon[data-tooltip]:after {
+    bottom: 140%;
+    left: 10px;
+    transform: none;
+}
+
+/* Make labels flex containers to align items */
+.input-group label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+/* Error message styles */
+.tax-error-message {
+    background: #fef2f2;
+    border: 1px solid #dc2626;
+    border-radius: 10px;
+    padding: 1rem;
+    margin: 1rem 0;
+    color: #991b1b;
+}
+
+.tax-error-message h4 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+}
+
+.error-help {
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+    color: #666;
+}
+
+/* Input error state */
+.error {
+    border-color: #dc2626 !important;
+    background-color: #fff5f5;
+}
+
+.error:focus {
+    box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.1) !important;
+}
+
+.gender-radio-group.error {
+    padding: 0.5rem;
+    border-radius: 8px;
+    background-color: #fff5f5;
+}
+
+/* Error styling updates */
+.input-group.error select,
+.input-group.error input {
+    border-color: #dc2626;
+    background-color: #fff5f5;
+    box-shadow: 0 0 0 1px #dc2626;
+}
+
+.input-group.error label {
+    color: #dc2626;
+}
+
+.gender-radio-group.error {
+    border: 2px solid #dc2626;
+    background-color: #fff5f5;
+    padding: 0.5rem;
+    border-radius: 10px;
+}
+
+.tax-error-message {
+    background: #fef2f2;
+    border: 1px solid #dc2626;
+    border-radius: 10px;
+    padding: 1.2rem;
+    margin: 1rem 0;
 }

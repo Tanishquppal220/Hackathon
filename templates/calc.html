@@ -5,210 +5,216 @@
 {% block head %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/calculator.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/calculator-animations.css') }}">
-    {% endblock %}
-    
-    {% block scripts %}
+{% endblock %}
+
+{% block scripts %}
     <script src="{{ url_for('static', filename='js/calculator.js') }}"></script>
 {% endblock %}
 
 {% block main %}
-    <div class="calculator-container">
-        <!DOCTYPE html>
-        <html lang="en">
-
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Indian Tax Calculator</title>
-        </head>
-
-        <body>
-            <div class="container">
-                <div class="header">INDIAN TAX CALCULATOR</div>
-
-                <div class="salary-input-section">
-                    <label class="input-label">Annual Salary</label>
-                    <div class="slider-container">
-                        <input type="range" id="salarySlider" min="0" max="50000000" step="10000" value="1000000">
-                        <div class="slider-value" id="sliderValue">₹10.0L</div>
-                    </div>
-
-                    <div class="manual-salary-container">
-                        <label for="manualSalary" class="input-label">Or Enter Amount:</label>
-                        <input type="number" id="manualSalary" min="0" max="50000000" step="10000"
-                            placeholder="Enter annual salary">
-                    </div>
-                </div>
-
-                <div class="assessment-year-container">
-                    <label for="assessmentYear" class="input-label">Select Assessment Year:</label>
-                    <select id="assessmentYear">
-                        <option value="2020"> 2025-26</option>
-                        <option value="2020"> 2024-25</option>
-                        <option value="2023"> 2023-24</option>
-                        <option value="2022"> 2022-23</option>
-                        <option value="2021"> 2021-22</option>
-                        <option value="2020"> 2020-21</option>
-                        <option value="2019"> 2019-20</option>
-                        <option value="2018"> 2018-19</option>
-                        <!-- Add more options as needed -->
-                    </select>
-                </div>
-                <div class="select-container">
-                    <label class="input-label" for="taxpayerCategory">Select Tax Payer Category:</label>
-                    <select id="taxpayerCategory">
-                        <option value="">-- Select Category --</option>
-                        <option value="individual">Individual</option>
-                        <option value="huf">HUF</option>
-                        <option value="firm">AOPs/BOI</option>
-                        <option value="firm">Domestic Company</option>
-                        <option value="firm">Foreign Company</option>
-                        <option value="firm">Firms</option>
-                        <option value="firm">LLP</option>
-                        <option value="firm">Co-operative Society</option>
-                    </select>
-                </div>
-
-                <div class="age-category-container" id="ageCategoryContainer">
-                    <label class="input-label" for="ageCategory">Select Age Category:</label>
-                    <select id="ageCategory" onchange="calculateTax()">
-                        <option value="general">Below 60 years</option>
-                        <option value="senior">Senior Citizen (60-80 years)</option>
-                        <option value="super-senior">Super Senior Citizen (Above 80 years)</option>
-                    </select>
-                </div>
-
-                <div class="residential-status-container" id="residentialStatusContainer">
-                    <label class="input-label">Select Residential Status:</label>
-                    <div class="status-options">
-                        <div class="status-option" onclick="selectStatus('resident')" id="residentOption">Resident</div>
-                        <div class="status-option" onclick="selectStatus('nri')" id="nriOption">Non-Resident Indian</div>
-                        <div class="status-option" onclick="selectStatus('rnor')" id="rnorOption">Resident but Not Ordinarily
-                            Resident</div>
-                    </div>
-                </div>
-
-                <div class="regime-select-container">
-                    <label class="input-label">Select Tax Regime:</label>
-                    <div class="regime-options">
-                        <div class="regime-option selected" onclick="selectRegime('new')" id="newRegimeOption">
-                            <h4>New Regime</h4>
-                            <p class="regime-desc">Lower tax rates without deductions</p>
-                        </div>
-                        <div class="regime-option" onclick="selectRegime('old')" id="oldRegimeOption">
-                            <h4>Old Regime</h4>
-                            <p class="regime-desc">Higher rates with deductions & exemptions</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div id="regimeComparison" class="regime-comparison-container"></div>
-                
-                <div class="deductions-container" id="deductionsContainer">
-                    <h3>Deductions Calculator (Old Regime)</h3>
-                
-                    <!-- Salary Components -->
-                    <div class="deduction-input">
-                        <label for="basicSalary">Basic Salary (Annual):</label>
-                        <input type="number" id="basicSalary" min="0" value="0" onchange="autoCalculateDeductions()">
-                    </div>
-                
-                    <!-- HRA Components -->
-                    <div class="deduction-input">
-                        <label for="rentPaid">Monthly Rent Paid:</label>
-                        <input type="number" id="rentPaid" min="0" value="0" onchange="autoCalculateDeductions()">
-                        <div class="checkbox-input">
-                            <input type="checkbox" id="isMetroCity" onchange="autoCalculateDeductions()">
-                            <label for="isMetroCity">Metro City</label>
-                        </div>
-                    </div>
-                
-                    <!-- Add this after the HRA inputs -->
-                    <div id="hraBreakdown" class="hra-breakdown-container"></div>
-                
-                    <!-- Calculated Deductions -->
-                    <div class="calculated-deductions hidden">
-                        <h4>Optimized Deductions</h4>
-                        <div class="deduction-input">
-                            <label for="section80C">Section 80C (max ₹1.5L):</label>
-                            <input type="number" id="section80C" min="0" max="150000" value="0" readonly>
-                        </div>
-                        <div class="deduction-input">
-                            <label for="section80D">Section 80D:</label>
-                            <input type="number" id="section80D" min="0" value="0" readonly>
-                        </div>
-                        <div class="deduction-input">
-                            <label for="hra">HRA Exemption:</label>
-                            <input type="number" id="hra" min="0" value="0" readonly>
-                        </div>
-                    </div>
-                
-                    <!-- Enhanced breakdown display -->
-                    <div id="deductionsBreakdown" class="deductions-breakdown">
-                        <!-- Will be populated by JavaScript -->
-                    </div>
-                </div>
-                
-                <div class="additional-taxes-container" id="additionalTaxesContainer">
-                    <h3>Additional Tax Calculations</h3>
-                
-                    <!-- Property Tax Section -->
-                    <div class="tax-section">
-                        <h4>Property Tax</h4>
-                        <div class="input-group">
-                            <input type="number" id="propertyValue" placeholder="Property Value">
-                            <select id="propertyLocation">
-                                <option value="metro">Metro City</option>
-                                <option value="urban">Urban Area</option>
-                                <option value="rural">Rural Area</option>
-                            </select>
-                            <button onclick="taxHandler.addPropertyDetail()">Add Property</button>
-                        </div>
-                        <div id="propertyList" class="items-list"></div>
-                    </div>
-                
-                    <!-- Capital Gains Section -->
-                    <div class="tax-section">
-                        <h4>Capital Gains</h4>
-                        <div class="input-group">
-                            <select id="assetType">
-                                <option value="equity">Equity Shares</option>
-                                <option value="property">Property</option>
-                                <option value="other">Other Assets</option>
-                            </select>
-                            <input type="number" id="buyPrice" placeholder="Purchase Price">
-                            <input type="date" id="buyDate">
-                            <input type="number" id="sellPrice" placeholder="Selling Price">
-                            <input type="date" id="sellDate">
-                            <button onclick="taxHandler.addCapitalGain()">Add Capital Gain</button>
-                        </div>
-                        <div id="capitalGainsList" class="items-list"></div>
-                    </div>
-                </div>
-
-                <div class="result-box" id="taxAmountBox">Income Tax:  0</div>
-                <div class="details-box">
-                    <h3>Details</h3>
-                    <p>Annual Salary: <span id="salaryAmount">1000000</span></p>
-                    <p>Income Tax: <span id="taxAmount">-</span></p>
-                </div>
-                <button class="calculate-tax-btn" onclick="calculateTax()">Calculate Tax</button>
-                <!-- Add this before the tax-laws div -->
-                <div id="aiAdvice" class="ai-advice-container"></div>
-                <div class="tax-laws">
-                    <h2>Indian Tax Laws</h2>
-                    <p>India's tax system is governed by the Income Tax Act of 1961. Key provisions include the classification
-                        of income into five heads: Salaries, Income from House Property, Profits and Gains of Business or
-                        Profession, Capital Gains, and Income from Other Sources. The Act mandates that individuals earning
-                        above a certain threshold must file income tax returns annually. Deductions under Section 80C, such as
-                        investments in PPF, NSC, and life insurance premiums, can reduce taxable income. Additionally, the Goods
-                        and Services Tax (GST) implemented in 2017, replaced multiple indirect taxes with a unified tax
-                        structure, simplifying compliance for businesses. Understanding these laws is crucial for effective tax
-                        planning and compliance.</p>
-                </div>
-            </div>
-        </body>
-
-        </html>
+<div class="calculator-container">
+    <div class="header">
+        <h1>INDIAN TAX CALCULATOR</h1>
     </div>
+
+    <form id="taxCalculatorForm" class="tax-form">
+        <div class="form-sections">
+            <!-- Basic Information Section -->
+            <section class="form-section">
+                <h2>
+                    Basic Information
+                    <span class="info-icon" data-tooltip="Enter your personal details and tax filing category">ⓘ</span>
+                </h2>
+                <div class="grid-2">
+                    <div class="input-group">
+                        <label for="taxpayerCategory">
+                            Tax Payer Category
+                            <span class="info-icon"
+                                data-tooltip="Select your tax filing status. This affects applicable tax rates and deductions.">ⓘ</span>
+                        </label>
+                        <select id="taxpayerCategory" required onchange="handleTaxpayerChange()">
+                            <option value="">Select Category</option>
+                            <option value="individual">Individual</option>
+                            <option value="huf">HUF</option>
+                            <option value="aop">AOPs/BOI</option>
+                            <option value="domestic">Domestic Company</option>
+                            <option value="foreign">Foreign Company</option>
+                            <option value="firm">Firms</option>
+                            <option value="llp">LLP</option>
+                            <option value="cooperative">Co-operative Society</option>
+                            </select>
+                            </div>
+                    <div class="input-group">
+                        <label for="financialYear">
+                            Financial Year
+                            <span class="info-icon"
+                                data-tooltip="The assessment year for which you are calculating taxes (Previous Year + 1)">ⓘ</span>
+                        </label>
+                        <select id="financialYear" required>
+                            <option value="2025">2025-26</option>
+                            <option value="2024">2024-25</option>
+                            <option value="2023">2023-24</option>
+                            <!-- Add more years as needed -->
+                        </select>
+                    </div>
+                </div>
+                <div class="grid-2">
+                    <div class="input-group">
+                        <label for="age">
+                            Age
+                            <span class="info-icon" data-tooltip="Your current age will help determine applicable tax benefits">ⓘ</span>
+                        </label>
+                        <input type="number" id="age" min="0" max="120" required onchange="handleTaxpayerChange()">
+                    </div>
+                    <div class="input-group">
+                        <label>Gender</label>
+                        <div class="gender-radio-group">
+                            <div class="radio-option">
+                                <input type="radio" id="male" name="gender" value="male">
+                                <label for="male">
+                                    <span class="radio-icon">👨</span>
+                                    Male
+                                </label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="female" name="gender" value="female">
+                                <label for="female">
+                                    <span class="radio-icon">👩</span>
+                                    Female
+                                </label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="other" name="gender" value="other">
+                                <label for="other">
+                                    <span class="radio-icon">👤</span>
+                                    Other
+                                </label>
+                            </div>
+                            </div>
+                    </div>
+                    </div>
+                    </section>
+
+            <!-- Income Details Section -->
+            <section class="form-section">
+                <h2>
+                    Income Details
+                    <span class="info-icon"
+                        data-tooltip="Enter your annual income from various sources including salary, HRA, and other income">ⓘ</span>
+                </h2>
+                <div class="income-section">
+                    <h3>
+                        Salary Income
+                        <span class="info-icon" data-tooltip="Include your basic salary, HRA, and other salary components">ⓘ</span>
+                    </h3>
+                    <div class="grid-2">
+                        <div class="input-group">
+                            <label for="basicSalary">
+                                Basic Salary (Annual)
+                                <span class="info-icon"
+                                    data-tooltip="Your total annual basic salary before any deductions or allowances">ⓘ</span>
+                            </label>
+                            <div class="salary-input-container">
+                                <input type="range" id="salarySlider" min="0" max="10000000" step="10000" value="0">
+                                <input type="number" id="basicSalary" min="0" value="0" required>
+                                <div class="salary-display" id="salaryDisplay">₹0</div>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label for="hra">
+                                HRA Received
+                                <span class="info-icon"
+                                    data-tooltip="House Rent Allowance received from employer. Used for tax exemption calculations if you live in rented accommodation">ⓘ</span>
+                            </label>
+                            <input type="number" id="hra" min="0" onchange="calculateTax()">
+                        </div>
+                    </div>
+                </div>
+                <div class="income-section">
+                    <h3>
+                        Other Income
+                        <span class="info-icon" data-tooltip="Income from sources like rent, interest, dividends, etc.">ⓘ</span>
+                    </h3>
+                    <div class="grid-2">
+                        <div class="input-group">
+                            <label for="rentalIncome">
+                                Rental Income
+                                <span class="info-icon"
+                                    data-tooltip="Annual income received from renting out property after standard deduction of 30%">ⓘ</span>
+                            </label>
+                            <input type="number" id="rentalIncome" min="0" onchange="calculateTax()">
+                        </div>
+                        <div class="input-group">
+                            <label for="interestIncome">
+                                Interest Income
+                                <span class="info-icon"
+                                    data-tooltip="Total interest earned from savings accounts, fixed deposits, and other interest-bearing investments">ⓘ</span>
+                            </label>
+                            <input type="number" id="interestIncome" min="0" onchange="calculateTax()">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Capital Gains Section -->
+            <section class="form-section">
+                <h2>
+                    Capital Gains
+                    <span class="info-icon"
+                        data-tooltip="Add details of any profits from sale of assets like stocks, property, or other investments">ⓘ</span>
+                </h2>
+                <div id="capitalGainsContainer"></div>
+                <button type="button" class="add-btn" onclick="addCapitalGainEntry()">+ Add Capital Gain</button>
+            </section>
+
+            <!-- Deductions Section -->
+            <section class="form-section">
+                <h2>
+                    Deductions
+                    <span class="info-icon"
+                        data-tooltip="Add your tax-saving investments and eligible deductions under various sections">ⓘ</span>
+                </h2>
+                <div class="regime-options">
+                    <!-- ...existing regime options... -->
+                </div>
+                <div id="deductionsContainer">
+                    <div class="grid-2">
+                        <div class="deductions-section">
+                            <h3>
+                                Section 80C
+                                <span class="info-icon"
+                                    data-tooltip="Tax deductions up to ₹1.5L for investments in PPF, ELSS, Life Insurance, etc.">ⓘ</span>
+                            </h3>
+                            <div id="section80CContainer"></div>
+                            <button type="button" class="add-btn" onclick="add80CEntry()">+ Add 80C Investment</button>
+                        </div>
+                        <div class="deductions-section">
+                            <h3>
+                                Other Deductions
+                                <span class="info-icon"
+                                    data-tooltip="Additional tax benefits under various sections like 80D (Health Insurance), 80E (Education Loan), etc.">ⓘ</span>
+                            </h3>
+                            <div class="ai-deduction-suggestions" id="aiDeductionSuggestions">
+                                <div class="suggestion-loading">Loading personalized deduction suggestions...</div>
+                            </div>
+                            <div class="other-deductions-container">
+                                <div id="otherDeductionsContainer"></div>
+                                <button type="button" class="add-btn" onclick="addOtherDeduction()">+ Add Other Deduction</button>
+                            </div>
+                            </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Results Section -->
+            <section class="form-section results-section">
+                <h2>Tax Calculation</h2>
+                <div id="taxSummary" class="tax-summary"></div>
+                <div id="aiAdvice" class="ai-advice"></div>
+            </section>
+        </div>
+
+        <button type="button" class="calculate-tax-btn" onclick="calculateFinalTax()">Calculate Tax</button>
+        </form>
+        </div>
 {% endblock %}
