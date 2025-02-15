@@ -1,43 +1,23 @@
 from flask import Flask, render_template, request, jsonify, abort
-from openai import OpenAI
-import os
-from dotenv import load_dotenv
-import httpx
 import plotly
 import plotly.express as px
 import plotly.graph_objects as go
 import pandas as pd
 import json
-from tax_utils import TaxPayer  # Replace taxcalc_india import
+from tax_utils import TaxPayer
 import numpy as np
 from flask_cors import CORS
 from jinja2.exceptions import TemplateNotFound
+import os
+from dotenv import load_dotenv
+import httpx
+import requests
 
 load_dotenv()
-
 app = Flask(__name__)
 CORS(app)
 
-try:
-    # Create custom HTTP client for OpenRouter
-    http_client = httpx.Client(
-        base_url="https://api.openrouter.ai/api/v1",  # Updated URL
-        timeout=60.0,
-        headers={
-            "HTTP-Referer": "https://taxguru.com",  # Your site URL
-            "X-Title": "TaxGuru AI",  # Your app name
-        }
-    )
-    
-    client = OpenAI(
-        base_url="https://api.openrouter.ai/api/v1/chat/completions",  # Specific endpoint
-        api_key=os.getenv('OPENROUTER_API_KEY'),
-        http_client=http_client
-    )
-except Exception as e:
-    print(f"Error initializing OpenAI client: {str(e)}")
-    client = None
-
+# Non-AI related constants
 TAX_SLABS = {
     "new_regime": {
         "slabs": [
@@ -70,6 +50,7 @@ TAX_SLABS = {
     }
 }
 
+# Core tax calculation functions
 def calculate_hra(basic_salary, rent_paid, is_metro, actual_hra):
     if not basic_salary or not rent_paid:
         return 0
@@ -155,6 +136,7 @@ def generate_liability_trend():
     )
     return json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
+# Basic routes
 @app.route('/')
 def dash():
     pie_chart = generate_income_pie_chart()
@@ -162,42 +144,6 @@ def dash():
     return render_template('Dashboard.html', 
                          pie_chart=pie_chart,
                          line_chart=line_chart)
-
-
-@app.route('/chat', methods=['POST','GET'])
-def chat():
-    if request.method == 'GET':
-        return render_template('chat.html')
-        
-    try:
-        if not client:
-            return jsonify({"response": "AI service is not configured properly."}), 500
-
-        data = request.json
-        user_message = data['message']
-
-        completion = client.chat.completions.create(
-            model="meta-llama/llama-2-70b-chat",  # Updated model
-            messages=[
-                {
-                    "role": "system",
-                    "content": "You are TaxGuru AI, an expert Indian tax advisor. Provide clear, concise answers about Indian tax laws and regulations."
-                },
-                {
-                    "role": "user",
-                    "content": user_message
-                }
-            ]
-        )
-
-        ai_response = completion.choices[0].message.content.strip()
-        return jsonify({"response": ai_response})
-
-    except Exception as e:
-        print(f"Chat Error: {str(e)}")
-        return jsonify({
-            "response": "I apologize, but I'm having trouble connecting to the AI service. Please try again in a moment."
-        }), 500
 
 @app.route('/calc')
 def calc():
@@ -215,48 +161,6 @@ def learning_content(page):
         return render_template(f'learning/{page}')
     except TemplateNotFound:
         abort(404)
-
-@app.route('/tax-advice', methods=['POST'])
-def tax_advice():
-    try:
-        data = request.json
-        income = data.get('income', 0)
-        regime = data.get('regime', 'new')
-        current_tax = data.get('currentTax', 0)
-
-        prompt = f"""
-        As a tax advisor, provide optimization advice for:
-        - Annual Income: ₹{income}
-        - Current Tax Regime: {regime}
-        - Current Tax Amount: ₹{current_tax}
-
-        Suggest ways to optimize tax savings within legal limits.
-        """
-
-        completion = client.chat.completions.create(
-            extra_headers={
-                "HTTP-Referer": "https://taxguru.com",
-                "X-Title": "TaxGuru AI",
-            },
-            model="meta-llama/llama-guard-3-8b",
-            messages=[
-                {
-                    "role": "system",
-                    "content": "You are an Indian tax optimization expert. Provide specific, actionable advice."
-                },
-                {
-                    "role": "user",
-                    "content": prompt
-                }
-            ]
-        )
-
-        advice = completion.choices[0].message.content.strip()
-        return jsonify({"advice": advice})
-
-    except Exception as e:
-        print(f"Error: {str(e)}")
-        return jsonify({"advice": "Unable to generate tax advice at the moment."}), 500
 
 @app.route('/calculate', methods=['POST'])
 def calculate():
@@ -298,6 +202,122 @@ def generate_optimization_suggestions(data, result):
                 "message": "Consider investing in 80C options to save up to ₹46,800 in tax"
             })
     return suggestions
+
+# AI-related functions
+GEMINI_BASE_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent"
+
+@app.route('/chat', methods=['POST','GET'])
+def chat():
+    if request.method == 'GET':
+        return render_template('chat.html')
+    
+    try:
+        api_key = os.getenv('GEMINI_API_KEY')
+        if not api_key:
+            return jsonify({
+                "status": "error",
+                "response": "AI service is not configured properly."
+            }), 500
+
+        data = request.json
+        user_message = data.get('message', '').strip()
+        
+        if not user_message:
+            return jsonify({
+                "status": "error",
+                "response": "Message cannot be empty"
+            }), 400
+
+        print(f"Sending message to Gemini: {user_message[:50]}...")
+
+        payload = {
+            "contents": [{
+                "parts": [{
+                    "text": f"As an Indian tax expert, answer this question: {user_message}"
+                }]
+            }]
+        }
+        
+        response = requests.post(
+            f"{GEMINI_BASE_URL}?key={api_key}",
+            headers={'Content-Type': 'application/json'},
+            json=payload,
+            timeout=30
+        )
+        
+        if response.status_code != 200:
+            print(f"Error response: {response.text}")
+            raise Exception(f"API error: {response.status_code}")
+
+        response_data = response.json()
+        
+        # Extract the response text and format it
+        if 'candidates' in response_data and response_data['candidates']:
+            ai_response = response_data['candidates'][0]['content']['parts'][0]['text']
+            # Format response: replace newlines with <br>, etc.
+            ai_response = ai_response.replace('\n', '<br>')
+            return jsonify({
+                "status": "success",
+                "response": ai_response
+            })
+        else:
+            return jsonify({
+                "status": "error",
+                "response": "No valid response generated"
+            }), 500
+
+    except Exception as e:
+        print(f"Chat Error: {str(e)}")
+        return jsonify({
+            "status": "error",
+            "response": "I apologize, but I'm having trouble connecting to the AI service.",
+            "error": str(e)
+        }), 500
+
+# Update the tax-advice route similarly
+@app.route('/tax-advice', methods=['POST'])
+def tax_advice():
+    try:
+        api_key = os.getenv('GEMINI_API_KEY')
+        if not api_key:
+            return jsonify({"advice": "AI service is not configured properly."}), 500
+
+        data = request.json
+        prompt = f"""As an Indian tax advisor, provide optimization advice for:
+        - Annual Income: ₹{data.get('income', 0)}
+        - Current Tax Regime: {data.get('regime', 'new')}
+        - Current Tax Amount: ₹{data.get('currentTax', 0)}
+        Suggest ways to optimize tax savings within legal limits."""
+
+        payload = {
+            "contents": [
+                {
+                    "parts": [
+                        {
+                            "text": prompt
+                        }
+                    ]
+                }
+            ]
+        }
+        
+        response = requests.post(
+            f"{GEMINI_BASE_URL}?key={api_key}",
+            headers={'Content-Type': 'application/json'},
+            json=payload
+        )
+        
+        if response.status_code != 200:
+            print(f"Error response: {response.text}")
+            raise Exception(f"Gemini API returned status code {response.status_code}")
+
+        response_data = response.json()
+        advice = response_data['candidates'][0]['content']['parts'][0]['text']
+        return jsonify({"advice": advice})
+
+    except Exception as e:
+        print(f"Tax Advice Error: {str(e)}")
+        return jsonify({"advice": "Unable to generate tax advice at the moment."}), 500
 
 def generate_tax_advice(income, regime, current_tax):
     advice = []

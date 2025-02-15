@@ -4,25 +4,17 @@ async function sendMessage() {
     
     if (!message) return;
 
-    // Add user message to chat
     const chatBody = document.querySelector('.chat-body');
-    const userMessage = `
-        <div class="chat-message user">
-            <div class="message-bubble">
-                ${message}
-            </div>
-        </div>
-    `;
-    chatBody.insertAdjacentHTML('beforeend', userMessage);
+    
+    // Add user message
+    appendMessage('user', message);
 
-    // Clear input and disable it while waiting
+    // Clear and disable input
     input.value = '';
     input.disabled = true;
-    const sendButton = document.querySelector('.chat-input button');
-    sendButton.disabled = true;
+    document.querySelector('.chat-input button').disabled = true;
 
     try {
-        // Call the backend API
         const response = await fetch('/chat', {
             method: 'POST',
             headers: {
@@ -33,36 +25,46 @@ async function sendMessage() {
 
         const data = await response.json();
         
-        const aiResponse = `
-            <div class="chat-message ai">
-                <div class="message-bubble">
-                    ${data.response}
-                </div>
-            </div>
-        `;
-        chatBody.insertAdjacentHTML('beforeend', aiResponse);
-        chatBody.scrollTop = chatBody.scrollHeight;
+        if (data.status === 'success') {
+            appendMessage('ai', data.response);
+        } else {
+            throw new Error(data.response || 'Failed to get response');
+        }
     } catch (error) {
-        // Handle error
-        const errorMessage = `
-            <div class="chat-message ai error">
-                <div class="message-bubble">
-                    Sorry, I'm having trouble responding right now. Please try again later.
-                </div>
-            </div>
-        `;
-        chatBody.insertAdjacentHTML('beforeend', errorMessage);
+        appendMessage('ai error', 'Sorry, I\'m having trouble responding right now. Please try again later.');
+        console.error('Chat error:', error);
     } finally {
-        // Re-enable input and button
+        // Re-enable input
         input.disabled = false;
-        sendButton.disabled = false;
+        document.querySelector('.chat-input button').disabled = false;
         input.focus();
     }
 }
 
+function appendMessage(type, content) {
+    const chatBody = document.querySelector('.chat-body');
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `chat-message ${type}`;
+    
+    const bubbleDiv = document.createElement('div');
+    bubbleDiv.className = 'message-bubble';
+    
+    // If content contains HTML (like <br>), use innerHTML, otherwise use textContent
+    if (type === 'ai' && content.includes('<br>')) {
+        bubbleDiv.innerHTML = content;
+    } else {
+        bubbleDiv.textContent = content;
+    }
+    
+    messageDiv.appendChild(bubbleDiv);
+    chatBody.appendChild(messageDiv);
+    chatBody.scrollTop = chatBody.scrollHeight;
+}
+
 // Add enter key support
 document.getElementById('chat-input').addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
         sendMessage();
     }
 });
