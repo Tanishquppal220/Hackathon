@@ -1,0 +1,29 @@
+{% extends "learning/base_learning.html" %}
+
+{% block title %}Tax Regimes Comparison{% endblock %}
+
+{% block content %}
+<h2>Old vs New Tax Regime</h2>
+
+<div class="comparison-grid">
+    <div class="regime-card">
+        <h3>Old Regime</h3>
+        <ul>
+            <li>Multiple tax deductions available</li>
+            <li>Higher basic exemption for senior citizens</li>
+            <li>HRA and other allowances exempt</li>
+            <li>Section 80C deductions allowed</li>
+        </ul>
+    </div>
+    
+    <div class="regime-card">
+        <h3>New Regime</h3>
+        <ul>
+            <li>Lower tax rates</li>
+            <li>No major deductions</li>
+            <li>Simplified tax structure</li>
+            <li>Standard deduction available</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

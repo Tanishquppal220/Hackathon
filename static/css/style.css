@@ -145,7 +145,7 @@ links ul li a:hover::after {
 }
 
 .hero-content {
-    margin-top: 60px;
+    margin-top: 30px;
     max-width: 900px;  /* increased from 700px */
     width: 90%;       /* added to ensure responsiveness */
     animation: fadeIn 1s ease-out;
@@ -645,11 +645,13 @@ links ul li a:hover::after {
 
 /* AI Chat Styles */
 .ai-chat {
-    margin-top: 2rem;
+    margin-top: 150px;
+        /* Changed from 2rem to 0 since we added padding to container */
     background: rgba(255, 255, 255, 0.95);
     border-radius: 15px;
     border: 1px solid rgba(74, 20, 140, 0.1);
     overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .chat-header {
@@ -700,7 +702,6 @@ links ul li a:hover::after {
 
 .chat-message.user .message-bubble {
     background: var(--primary-light);
-    color: var(--text-light);
 }
 
 .chat-input {
@@ -775,8 +776,10 @@ links ul li a:hover::after {
 
 .chat-container {
     max-width: 1000px;
-    margin: 120px auto 2rem;
-    padding: 0 1.5rem;
+    margin: 150px auto 2rem;
+        /* Increased top margin from 120px to 150px */
+        padding: 2rem 1.5rem;
+        /* Increased padding from 0 1.5rem to 2rem 1.5rem */
 }
 
 .chat-suggestions {
@@ -793,6 +796,7 @@ links ul li a:hover::after {
 }
 
 .suggestion-buttons {
+    /* color: #007bff; */
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 1rem;
@@ -800,7 +804,6 @@ links ul li a:hover::after {
 
 .suggestion-buttons button {
     background: var(--primary-light);
-    color: var(--text-light);
     border: none;
     padding: 0.8rem 1.2rem;
     border-radius: 8px;
@@ -809,6 +812,213 @@ links ul li a:hover::after {
 }
 
 .suggestion-buttons button:hover {
+    color: black;
     background: var(--primary);
     transform: translateY(-2px);
+}
+.chat-container {
+    max-width: 1000px;
+    margin: 2rem auto;
+    padding: 1rem;
+}
+
+.ai-chat {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.chat-header {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid #ddd;
+}
+
+.ai-icon {
+    font-size: 1.5rem;
+    margin-right: 0.5rem;
+}
+
+.chat-body {
+    height: 400px;
+    overflow-y: auto;
+    padding: 1rem;
+}
+
+.chat-message {
+    margin-bottom: 1rem;
+}
+
+.chat-message.ai .message-bubble {
+    color: black;
+    background: #f0f7ff;
+    border-radius: 12px 12px 12px 0;
+}
+
+.chat-message.user .message-bubble {
+    background: #e3f2fd;
+    border-radius: 12px 12px 0 12px;
+    margin-left: auto;
+}
+
+.message-bubble {
+    max-width: 80%;
+    padding: 0.8rem 1rem;
+    margin: 0.5rem 0;
+}
+
+.chat-input {
+    display: flex;
+    padding: 1rem;
+    border-top: 1px solid #ddd;
+}
+
+.chat-input input {
+    flex: 1;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-right: 0.5rem;
+}
+
+.chat-input button {
+    padding: 0.5rem 1rem;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.chat-suggestions {
+    margin-top: 2rem;
+}
+
+.suggestion-buttons {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.suggestion-buttons button {
+    padding: 0.8rem;
+    background: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.suggestion-buttons button:hover {
+    background: #e9ecef;
+}
+
+/* Learn Page Styles */
+.learn-container {
+    max-width: 1200px;
+    margin: 120px auto 40px;
+    padding: 0 20px;
+}
+
+.learn-container h1 {
+    color: var(--text-light);
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 2.5rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.learn-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    padding: 20px 0;
+}
+
+.learn-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.learn-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.learn-card h2 {
+    color: var(--primary);
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+}
+
+.learn-card ul {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 20px;
+}
+
+.learn-card ul li {
+    color: #333;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(74, 20, 140, 0.1);
+}
+
+.learn-card ul li:last-child {
+    border-bottom: none;
+}
+
+.learn-more {
+    display: inline-block;
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 500;
+    margin-top: 15px;
+    transition: color 0.3s ease;
+}
+
+.learn-more:hover {
+    color: var(--primary-light);
+}
+
+@media (max-width: 768px) {
+    .learn-container h1 {
+        font-size: 2rem;
+    }
+
+    .learn-grid {
+        gap: 20px;
+    }
+
+    .learn-card {
+        padding: 20px;
+    }
+}
+
+/* Learning Content Styles */
+.learning-content {
+    max-width: 1000px;
+    margin: 100px auto 40px;
+    padding: 20px;
+}
+
+.content-container {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    margin-top: 60px;
+}
+
+.learn-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 15px;
 }

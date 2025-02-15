@@ -1,0 +1,110 @@
+{% extends "layout.html" %}
+
+{% block title %}Learn About Tax{% endblock %}
+
+{% block main %}
+<div class="learn-container">
+    <h1>Learn About Indian Taxation</h1>
+    
+    <div class="learn-grid">
+        <div class="learn-card">
+            <h2>Income Tax Basics</h2>
+            <ul>
+                <li>What is Income Tax?</li>
+                <li>Who needs to pay taxes?</li>
+                <li>Different types of income</li>
+                <li>Tax filing deadlines</li>
+            </ul>
+            <div class="learn-links">
+                <a href="{{ url_for('learning_content', page='income-tax-basics') }}" class="learn-more">Income Tax →</a>
+                <a href="{{ url_for('learning_content', page='tax-filing') }}" class="learn-more">Tax Filing →</a>
+            </div>
+        </div>
+
+        <div class="learn-card">
+            <h2>Tax Slabs & Rates</h2>
+            <ul>
+                <li>Understanding tax slabs</li>
+                <li>Old vs New regime</li>
+                <li>Surcharge and cess</li>
+                <li>Age-based exemptions</li>
+            </ul>
+            <div class="learn-links">
+                <a href="{{ url_for('learning_content', page='tax-slabs') }}" class="learn-more">Tax Slabs →</a>
+                <a href="{{ url_for('learning_content', page='tax-regimes') }}" class="learn-more">Tax Regimes →</a>
+            </div>
+        </div>
+
+        <div class="learn-card">
+            <h2>Deductions & Exemptions</h2>
+            <ul>
+                <li>Section 80C investments</li>
+                <li>Housing loan benefits</li>
+                <li>Medical insurance</li>
+                <li>Standard deduction</li>
+            </ul>
+            <div class="learn-links">
+                <a href="{{ url_for('learning_content', page='section-80c') }}" class="learn-more">Section 80C →</a>
+                <a href="{{ url_for('learning_content', page='hra-exemption') }}" class="learn-more">HRA Benefits →</a>
+            </div>
+        </div>
+
+        <div class="learn-card">
+            <h2>Tax Saving Investments</h2>
+            <ul>
+                <li>PPF & EPF</li>
+                <li>ELSS Mutual Funds</li>
+                <li>National Pension System</li>
+                <li>Tax-free bonds</li>
+            </ul>
+            <div class="learn-links">
+                <a href="{{ url_for('learning_content', page='ppf-epf') }}" class="learn-more">PPF & EPF →</a>
+                <a href="{{ url_for('learning_content', page='elss-funds') }}" class="learn-more">ELSS Funds →</a>
+            </div>
+        </div>
+
+        <div class="learn-card">
+            <h2>Capital Gains</h2>
+            <ul>
+                <li>Understanding capital gains tax</li>
+                <li>Long-term vs short-term gains</li>
+                <li>Equity investments taxation</li>
+                <li>Property gains exemptions</li>
+            </ul>
+            <div class="learn-links">
+                <a href="{{ url_for('learning_content', page='long-term-vs-short-term') }}" class="learn-more">Long vs Short Term →</a>
+                <a href="{{ url_for('learning_content', page='tax-on-equity-investments') }}" class="learn-more">Equity Tax →</a>
+                <a href="{{ url_for('learning_content', page='section-54-property-gains-exemption') }}" class="learn-more">Property Tax →</a>
+            </div>
+        </div>
+
+        <div class="learn-card">
+            <h2>Investment Taxation</h2>
+            <ul>
+                <li>Tax-free investments</li>
+                <li>Mutual funds taxation</li>
+                <li>Gold investments</li>
+                <li>Debt vs Equity taxation</li>
+            </ul>
+            <div class="learn-links">
+                <a href="{{ url_for('learning_content', page='tax-free-investments') }}" class="learn-more">Tax-Free Options →</a>
+                <a href="{{ url_for('learning_content', page='debt-vs-equity-fund-taxation') }}" class="learn-more">Fund Types →</a>
+                <a href="{{ url_for('learning_content', page='capital-gains-on-gold-investments') }}" class="learn-more">Gold Tax →</a>
+            </div>
+        </div>
+
+        <div class="learn-card">
+            <h2>Advanced Topics</h2>
+            <ul>
+                <li>Indexation benefits</li>
+                <li>Tax optimization</li>
+                <li>International taxation</li>
+                <li>Business income tax</li>
+            </ul>
+            <div class="learn-links">
+                <a href="{{ url_for('learning_content', page='indexation-benefit-in-ltcg') }}" class="learn-more">Indexation →</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

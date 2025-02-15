@@ -1,59 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TaxGuru - AI Chat Assistant</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
-<body>
-    <nav>
-        <div class="nav-grid">
-            <div class="logo">
-                <a href="/">
-                    <img src="{{ url_for('static', filename='img/logo.png') }}" alt="TaxGuru Logo">
-                </a>
-            </div>
-            <div class="links">
-                <ul>
-                    <li><a href="/calc">Tax Calculator</a></li>
-                    <li><a href="/">Home</a></li>
-                    <li><a href="#timeline">Timeline</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+{% extends "layout.html" %}
 
-    <div class="chat-container">
-        <div class="ai-chat">
-            <div class="chat-header">
-                <div class="ai-icon">🤖</div>
-                <h2>TaxGuru AI Assistant</h2>
-            </div>
-            <div class="chat-body">
-                <div class="chat-message ai">
-                    <div class="message-bubble">
-                        Hello! I'm your TaxGuru AI assistant. How can I help you with your tax-related questions today?
-                    </div>
+{% block title %}AI Chat Assistant{% endblock %}
+
+{% block main %}
+<div class="chat-container">
+    <div class="ai-chat">
+        <div class="chat-header">
+            <div class="ai-icon">🤖</div>
+            <h2>TaxGuru AI Assistant</h2>
+        </div>
+        <div class="chat-body">
+            <div class="chat-message ai">
+                <div class="message-bubble">
+                    Hello! I'm your TaxGuru AI assistant. How can I help you with your tax-related questions today?
                 </div>
             </div>
-            <div class="chat-input">
-                <input type="text" id="chat-input" placeholder="Type your question here...">
-                <button onclick="sendMessage()">Send</button>
-            </div>
         </div>
-
-        <div class="chat-suggestions">
-            <h3>Suggested Topics</h3>
-            <div class="suggestion-buttons">
-                <button onclick="askQuestion('How does the new tax regime work?')">New Tax Regime</button>
-                <button onclick="askQuestion('What are the main deductions under Section 80C?')">Section 80C Deductions</button>
-                <button onclick="askQuestion('How to calculate HRA exemption?')">HRA Calculation</button>
-                <button onclick="askQuestion('What are the tax filing deadlines?')">Filing Deadlines</button>
-            </div>
+        <div class="chat-input">
+            <input type="text" id="chat-input" placeholder="Type your question here...">
+            <button onclick="sendMessage()">Send</button>
         </div>
     </div>
 
-    <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
-</body>
-</html>
+    <div class="chat-suggestions">
+        <h3>Suggested Topics</h3>
+        <div class="suggestion-buttons">
+            <button onclick="askQuestion('How does the new tax regime work?')">New Tax Regime</button>
+            <button onclick="askQuestion('What are the main deductions under Section 80C?')">Section 80C Deductions</button>
+            <button onclick="askQuestion('How to calculate HRA exemption?')">HRA Calculation</button>
+            <button onclick="askQuestion('What are the tax filing deadlines?')">Filing Deadlines</button>
+        </div>
+    </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+{% endblock %}

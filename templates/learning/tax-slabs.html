@@ -1,0 +1,41 @@
+{% extends "learning/base_learning.html" %}
+
+{% block title %}Tax Slabs and Rates{% endblock %}
+
+{% block content %}
+<h2>Tax Slabs and Rates (FY 2023-24)</h2>
+
+<h3>New Tax Regime</h3>
+<div class="tax-table">
+    <table>
+        <tr>
+            <th>Income Range</th>
+            <th>Tax Rate</th>
+        </tr>
+        <tr>
+            <td>Up to ₹3,00,000</td>
+            <td>Nil</td>
+        </tr>
+        <tr>
+            <td>₹3,00,001 to ₹6,00,000</td>
+            <td>5%</td>
+        </tr>
+        <tr>
+            <td>₹6,00,001 to ₹9,00,000</td>
+            <td>10%</td>
+        </tr>
+        <tr>
+            <td>₹9,00,001 to ₹12,00,000</td>
+            <td>15%</td>
+        </tr>
+        <tr>
+            <td>₹12,00,001 to ₹15,00,000</td>
+            <td>20%</td>
+        </tr>
+        <tr>
+            <td>Above ₹15,00,000</td>
+            <td>30%</td>
+        </tr>
+    </table>
+</div>
+{% endblock %}

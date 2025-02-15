@@ -36,28 +36,28 @@
                 <div class="panel-section">
                     <h2>Key Tax Metrics</h2>
                     <div class="metric-card">
-                        <h3>Current FY Tax Regime</h3>
-                        <p class="highlight">New Regime</p>
+                        <h3>Current Tax Regime</h3>
+                        <p class="highlight">{{ regime }}</p>
+                        <span class="sub-text">Based on your selection</span>
                     </div>
                     <div class="metric-card">
-                        <h3>Total Tax Saved (YTD)</h3>
-                        <p class="highlight money">23,500</p>
-                        <span class="sub-text">via exemptions</span>
+                        <h3>Total Tax Liability</h3>
+                        <p class="highlight money">{{ tax_liability }}</p>
+                        <span class="sub-text">For FY 2023-24</span>
                     </div>
                     <div class="metric-card">
-                        <h3>Projected Tax Liability</h3>
-                        <p class="highlight money">1,12,000</p>
-                        <span class="sub-text">Last Year: ₹1,45,000</span>
+                        <h3>Potential Tax Savings</h3>
+                        <p class="highlight money">{{ potential_savings }}</p>
+                        <span class="sub-text">Available deductions</span>
+                    </div>
+                    <div class="metric-card">
+                        <h3>Due Date</h3>
+                        <p class="highlight">{{ next_due_date }}</p>
+                        <span class="sub-text">Next tax payment</span>
                     </div>
                 </div>
 
                 <div class="panel-section">
-                    <h2>Exemption Utilization</h2>
-                    <div class="progress-card">
-                        <div class="progress-header">
-                            <span>Section 80C</span>
-                            <span>₹1.2L / ₹1.5L</span>
-                        </div>
                         <div class="progress-bar">
                             <div class="progress" style="width: 80%"></div>
                         </div>
@@ -86,6 +86,14 @@
 
                 <div class="ai-suggestions">
                     <h2>AI Suggestions</h2>
+                    <div class="suggestion-card">
+                        <div class="suggestion-icon">💡</div>
+                        <div class="suggestion-content">
+                            <h3>Investment Opportunity</h3>
+                            <p>Invest ₹30k in ELSS to save ₹4.5k under 80C</p>
+                            <a href="/calc" class="suggestion-link">Calculate Savings →</a>
+                        </div>
+                    </div>
                     <div class="suggestion-card">
                         <div class="suggestion-icon">💡</div>
                         <div class="suggestion-content">
