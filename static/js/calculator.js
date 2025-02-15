@@ -18,6 +18,21 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function initializeForm() {
+    // Set all number inputs to 0 by default
+    document.querySelectorAll('input[type="number"]').forEach(input => {
+        input.value = '0';
+    });
+
+    // Set first options in dropdowns
+    document.querySelectorAll('select').forEach(select => {
+        if (select.options.length > 0) {
+            select.selectedIndex = 0;
+        }
+    });
+
+    // Set male gender by default
+    document.getElementById('male').checked = true;
+
     const taxpayerCategory = document.getElementById('taxpayerCategory');
     const age = document.getElementById('age');
     const financialYear = document.getElementById('financialYear');
@@ -27,16 +42,10 @@ function initializeForm() {
     age.addEventListener('change', handleTaxpayerChange);
     financialYear.addEventListener('change', handleTaxpayerChange);
 
-    // Initialize salary slider and other inputs
-    const inputs = document.querySelectorAll('input[type="number"], select');
-    inputs.forEach(input => {
-        input.addEventListener('change', () => {
-            if (input.id === 'basicSalary') {
-                currentSalary = Number(input.value) || 0;
-            }
-            calculateTax();
-        });
-    });
+    // Initialize salary and trigger initial calculation
+    currentSalary = 0;
+    updateSalaryInputs(0);
+    calculateTax();
 }
 
 function updatePreviewCalculations() {
@@ -49,19 +58,25 @@ function updatePreviewCalculations() {
 
 async function calculateTax() {
     try {
-        // Collect form data without validation
         const formData = collectFormData(false);
+        const ageValue = document.getElementById('age')?.value;
+
+        // Ensure income is a valid number
+        const income = Math.max(0, Number(document.getElementById('basicSalary')?.value) || 0);
+        currentSalary = income;
 
         const payload = {
-            income: currentSalary,
+            income: income,
             regime: selectedRegime,
-            age_category: document.getElementById('age')?.value || '0',
+            age_category: String(parseInt(ageValue) || 0),
             deductions: selectedRegime === 'old' ? {
                 section80C: formData?.deductions?.section80C?.reduce((sum, item) => sum + (Number(item.amount) || 0), 0) || 0,
                 section80D: 0,
                 hra: Number(document.getElementById('hra')?.value) || 0
             } : {}
         };
+
+        console.log('Sending payload:', payload); // Debug log
 
         const response = await fetch('/calculate', {
             method: 'POST',
@@ -70,13 +85,23 @@ async function calculateTax() {
         });
 
         const data = await response.json();
+        console.log('Received response:', data); // Debug log
+
+        // Always display the result, even if it's zeros
         displayTaxCalculation(data);
-        updateRegimeComparison(data.regime_comparison);
+        if (data.regime_comparison) {
+            updateRegimeComparison(data.regime_comparison);
+        }
 
     } catch (error) {
         console.error('Tax calculation error:', error);
-        // Just clear the display without showing error
-        document.getElementById('taxSummary').innerHTML = '';
+        // Show zero calculations instead of error message
+        displayTaxCalculation({
+            totalIncome: currentSalary,
+            incomeBreakdown: [{ description: "Basic Salary", amount: currentSalary }],
+            deductionsBreakdown: [],
+            finalTax: 0
+        });
     }
 }
 
@@ -140,26 +165,29 @@ function updateDisplay(value) {
 
 // Initialize
 window.addEventListener('DOMContentLoaded', function() {
+    initializeForm();
+    loadDeductionSuggestions();
+
     const slider = document.getElementById('salarySlider');
-    const manualInput = document.getElementById('manualSalary');
+    const basicSalary = document.getElementById('basicSalary');
 
-    // Handle slider input
-    slider.addEventListener('input', function(e) {
-        updateDisplay(e.target.value);
-    });
+    if (slider) {
+        slider.value = 0;
+        slider.addEventListener('input', function (e) {
+            updateSalaryInputs(e.target.value);
+        });
+    }
 
-    // Handle manual input
-    manualInput.addEventListener('input', function(e) {
-        updateDisplay(e.target.value);
-    });
-
-    // Handle manual input blur for formatting
-    manualInput.addEventListener('blur', function(e) {
-        updateDisplay(e.target.value);
-    });
+    if (basicSalary) {
+        basicSalary.value = 0;
+        basicSalary.addEventListener('input', function (e) {
+            updateSalaryInputs(e.target.value);
+        });
+        basicSalary.addEventListener('change', calculateTax);
+    }
 
     // Initial setup
-    updateDisplay(currentSalary);
+    updateSalaryInputs(0);
     selectStatus('resident');
     handleTaxpayerChange();
     selectRegime('new');
@@ -494,25 +522,21 @@ function calculateFinalTax() {
 
 // Restore slider functionality
 function updateSalaryInputs(value) {
+    // Ensure proper number conversion
+    const numericValue = Number(value) || 0;
+    currentSalary = numericValue;
+
+    // Update all form elements
     const slider = document.getElementById('salarySlider');
     const input = document.getElementById('basicSalary');
     const display = document.getElementById('salaryDisplay');
 
-    // Ensure value is a number and within bounds
-    value = Math.min(Math.max(Number(value) || 0, 0), 10000000);
-    currentSalary = value;
-
-    // Update all form elements
-    slider.value = value;
-    input.value = value;
+    if (slider) slider.value = numericValue;
+    if (input) input.value = numericValue;
 
     // Format display value
-    if (value >= 10000000) {
-        display.textContent = `₹${(value / 10000000).toFixed(2)} Cr`;
-    } else if (value >= 100000) {
-        display.textContent = `₹${(value / 100000).toFixed(1)} L`;
-    } else {
-        display.textContent = `₹${value.toLocaleString('en-IN')}`;
+    if (display) {
+        display.textContent = formatAmount(numericValue);
     }
 
     calculateTax();
@@ -611,20 +635,20 @@ function addOtherDeduction(title = '', section = '', maxAmount = 0) {
 }
 
 function handleTaxpayerChange() {
-    const category = document.getElementById('taxpayerCategory').value;
-    const age = document.getElementById('age').value;
-    const financialYear = document.getElementById('financialYear').value;
+    const category = document.getElementById('taxpayerCategory')?.value || '';
+    const ageInput = document.getElementById('age');
+    const age = parseInt(ageInput?.value || '0');
 
     // Set initial salary based on category and age
     let initialSalary = 1000000; // Default 10L
 
-    if (category === 'individual') {
+    if (category === 'individual' && !isNaN(age)) {
         if (age < 30) {
-            initialSalary = 500000; // 5L for young professionals
+            initialSalary = 500000;
         } else if (age < 50) {
-            initialSalary = 1000000; // 10L for mid-career
+            initialSalary = 1000000;
         } else {
-            initialSalary = 1500000; // 15L for seniors
+            initialSalary = 1500000;
         }
     } else if (category === 'domestic' || category === 'foreign') {
         initialSalary = 5000000; // 50L for companies

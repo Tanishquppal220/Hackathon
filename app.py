@@ -166,21 +166,36 @@ def learning_content(page):
 def calculate():
     data = request.json
     try:
+        print("Received data:", data)  # Debug log
+        
+        # Ensure income is a valid number
+        income = float(data.get('income', 0))
+        if not isinstance(income, (int, float)):
+            raise ValueError("Invalid income value")
+            
+        # Ensure regime is valid
+        regime_type = data.get('regime', 'new')
+        if regime_type not in ['new', 'old']:
+            regime_type = 'new'
+            
+        # Ensure age category is a valid integer
+        age_category = str(int(data.get('age_category', '0') or '0'))
+        
         tax_result = calculate_tax(
-            income=data['income'],
-            regime_type=data['regime'],
-            age_category=data['age_category'],
-            deductions=data.get('deductions')
+            income=income,
+            regime_type=regime_type,
+            age_category=age_category,
+            deductions=data.get('deductions', {})
         )
         
-        # Add income breakdown
+        # Add income breakdown and prepare response
         result = {
             "tax_breakdown": tax_result,
-            "totalIncome": data['income'],
+            "totalIncome": income,
             "incomeBreakdown": [
                 {
                     "description": "Basic Salary",
-                    "amount": data['income']
+                    "amount": income
                 }
             ],
             "deductionsBreakdown": [],
@@ -197,25 +212,29 @@ def calculate():
                     })
         
         # Calculate comparison with other regime
-        other_regime = "old" if data['regime'] == "new" else "new"
+        other_regime = "old" if regime_type == "new" else "new"
         comparison = calculate_tax(
-            income=data['income'],
+            income=income,
             regime_type=other_regime,
-            age_category=data['age_category']
+            age_category=age_category
         )
         
         result["regime_comparison"] = {
-            "new_regime": comparison["tax"] if data['regime'] == "old" else tax_result["tax"],
-            "old_regime": tax_result["tax"] if data['regime'] == "old" else comparison["tax"]
+            "new_regime": comparison["tax"] if regime_type == "old" else tax_result["tax"],
+            "old_regime": tax_result["tax"] if regime_type == "old" else comparison["tax"]
         }
 
         # Add optimization suggestions
         result["optimization_opportunities"] = generate_optimization_suggestions(data, tax_result)
         
+        print("Calculation result:", result)  # Debug log
         return jsonify(result)
         
+    except ValueError as e:
+        print(f"Value error: {str(e)}")  # Debug log
+        return jsonify({"error": "Invalid input. Please check your values."}), 400
     except Exception as e:
-        print(f"Error in tax calculation: {str(e)}")
+        print(f"Error in tax calculation: {str(e)}")  # Debug log
         return jsonify({"error": str(e)}), 400
 
 def generate_optimization_suggestions(data, result):

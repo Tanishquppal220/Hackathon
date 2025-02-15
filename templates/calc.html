@@ -64,7 +64,7 @@
                             Age
                             <span class="info-icon" data-tooltip="Your current age will help determine applicable tax benefits">ⓘ</span>
                         </label>
-                        <input type="number" id="age" min="0" max="120" required onchange="handleTaxpayerChange()">
+                        <input type="number" id="age" min="0" max="120" value="0" required onchange="handleTaxpayerChange()">
                     </div>
                     <div class="input-group">
                         <label>Gender</label>
@@ -121,12 +121,8 @@
                             </div>
                         </div>
                         <div class="input-group">
-                            <label for="hra">
-                                HRA Received
-                                <span class="info-icon"
-                                    data-tooltip="House Rent Allowance received from employer. Used for tax exemption calculations if you live in rented accommodation">ⓘ</span>
-                            </label>
-                            <input type="number" id="hra" min="0" onchange="calculateTax()">
+                            <label for="hra">HRA Received</label>
+                            <input type="number" id="hra" min="0" value="0" onchange="calculateTax()">
                         </div>
                     </div>
                 </div>
@@ -137,20 +133,12 @@
                     </h3>
                     <div class="grid-2">
                         <div class="input-group">
-                            <label for="rentalIncome">
-                                Rental Income
-                                <span class="info-icon"
-                                    data-tooltip="Annual income received from renting out property after standard deduction of 30%">ⓘ</span>
-                            </label>
-                            <input type="number" id="rentalIncome" min="0" onchange="calculateTax()">
+                            <label for="rentalIncome">Rental Income</label>
+                            <input type="number" id="rentalIncome" min="0" value="0" onchange="calculateTax()">
                         </div>
                         <div class="input-group">
-                            <label for="interestIncome">
-                                Interest Income
-                                <span class="info-icon"
-                                    data-tooltip="Total interest earned from savings accounts, fixed deposits, and other interest-bearing investments">ⓘ</span>
-                            </label>
-                            <input type="number" id="interestIncome" min="0" onchange="calculateTax()">
+                            <label for="interestIncome">Interest Income</label>
+                            <input type="number" id="interestIncome" min="0" value="0" onchange="calculateTax()">
                         </div>
                     </div>
                 </div>
