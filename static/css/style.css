@@ -852,12 +852,12 @@ links ul li a:hover::after {
 }
 
 .chat-message.ai .message-bubble {
-    color: black;
     background: #f0f7ff;
     border-radius: 12px 12px 12px 0;
 }
 
 .chat-message.user .message-bubble {
+    color: black;
     background: #e3f2fd;
     border-radius: 12px 12px 0 12px;
     margin-left: auto;
